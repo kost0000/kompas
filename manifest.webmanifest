@@ -1,0 +1,32 @@
+{
+  "name": "Kompas",
+  "short_name": "Kompas",
+  "description": "Kripto korpa na dnevnim svećama: šta danas uraditi, FTMO test i dnevnik.",
+  "lang": "sr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0E1726",
+  "theme_color": "#0E1726",
+  "icons": [
+    {
+      "src": "ikone/ikona-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "ikone/ikona-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "ikone/ikona-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

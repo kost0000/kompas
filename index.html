@@ -1,0 +1,1219 @@
+<!doctype html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0E1726" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F2F5FA" media="(prefers-color-scheme: light)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Kompas">
+<meta name="description" content="Kripto korpa na dnevnim svećama: šta danas uraditi, FTMO test i dnevnik.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="ikone/ikona-192.png">
+<link rel="apple-touch-icon" href="ikone/apple-touch-icon.png">
+<title>Kompas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Raspored: jedan stub do 560 px, zaglavlje gore, kartica po kovanici, donja traka sa četiri ekrana.
+   Boje i slova su iste kao u Kompasu na računaru, da obe aplikacije izgledaju kao jedna. */
+:root {
+  --ink: #0E1726;
+  --panel: #152238;
+  --panel-2: #1B2A44;
+  --line: #263553;
+  --text: #E7EDF6;
+  --muted: #8B9AB4;
+  --long: #2FC2B0;
+  --exit: #F25C7A;
+  --warn: #F3B94D;
+  --accent: #6FB3FF;
+  --long-tint: rgba(47, 194, 176, .14);
+  --exit-tint: rgba(242, 92, 122, .14);
+  --warn-tint: rgba(243, 185, 77, .14);
+  --accent-tint: rgba(111, 179, 255, .14);
+  --bar-bg: rgba(14, 23, 38, .82);
+  --shadow: 0 10px 30px rgba(3, 8, 18, .35);
+  --f-display: "Bricolage Grotesque", "Figtree", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --f-ui: "Figtree", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --r: 18px;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --ink: #F2F5FA; --panel: #FFFFFF; --panel-2: #EAF0F7; --line: #D7DFEB; --text: #0F1A2B; --muted: #5A6A84;
+    --long: #0B9483; --exit: #D3355A; --warn: #B57614; --accent: #2D6CCF;
+    --long-tint: rgba(11, 148, 131, .10); --exit-tint: rgba(211, 53, 90, .09); --warn-tint: rgba(181, 118, 20, .10); --accent-tint: rgba(45, 108, 207, .09);
+    --bar-bg: rgba(242, 245, 250, .86); --shadow: 0 8px 24px rgba(15, 26, 43, .08);
+    color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --ink: #F2F5FA; --panel: #FFFFFF; --panel-2: #EAF0F7; --line: #D7DFEB; --text: #0F1A2B; --muted: #5A6A84;
+  --long: #0B9483; --exit: #D3355A; --warn: #B57614; --accent: #2D6CCF;
+  --long-tint: rgba(11, 148, 131, .10); --exit-tint: rgba(211, 53, 90, .09); --warn-tint: rgba(181, 118, 20, .10); --accent-tint: rgba(45, 108, 207, .09);
+  --bar-bg: rgba(242, 245, 250, .86); --shadow: 0 8px 24px rgba(15, 26, 43, .08);
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; }
+body {
+  background: var(--ink); color: var(--text);
+  font: 15px/1.45 var(--f-ui);
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent;
+}
+button, input, select { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+[hidden] { display: none !important; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+
+.app { max-width: 560px; margin: 0 auto; padding-inline: 16px; padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
+
+/* zaglavlje */
+.bar {
+  position: sticky; top: 0; z-index: 10; margin-inline: -16px; padding: calc(10px + env(safe-area-inset-top, 0px)) 16px 10px;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  background: var(--bar-bg); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid var(--line);
+}
+.brand { display: flex; align-items: center; gap: 9px; font: 800 21px/1 var(--f-display); letter-spacing: -0.02em; }
+.brand svg { width: 26px; height: 26px; }
+.bar-r { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.upd { color: var(--muted); font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.upd i { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--muted); margin-right: 6px; vertical-align: 1px; }
+.upd.ok i { background: var(--long); }
+.upd.err i { background: var(--exit); }
+.icon-btn { width: 38px; height: 38px; border-radius: 12px; border: 1px solid var(--line); background: var(--panel); display: grid; place-items: center; cursor: pointer; padding: 0; }
+.icon-btn svg { width: 19px; height: 19px; }
+.icon-btn[aria-pressed="false"] { color: var(--muted); }
+
+main { padding-top: 14px; display: grid; gap: 14px; }
+.view { display: grid; gap: 14px; min-width: 0; }
+h2.sec { font: 700 13px/1.2 var(--f-ui); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 6px 2px -4px; }
+.lede { color: var(--muted); margin: 0; font-size: 14px; }
+.fine { color: var(--muted); font-size: 12.5px; margin: 2px 2px 0; }
+
+/* glavna kartica */
+.hero { border-radius: 22px; padding: 18px; background: var(--panel); border: 1px solid var(--line); box-shadow: var(--shadow); display: grid; gap: 14px; position: relative; overflow: hidden; }
+.hero::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(120% 90% at 100% 0%, var(--tint, transparent) 0%, transparent 60%); }
+.hero.buy { --tint: var(--long-tint); border-color: color-mix(in srgb, var(--long) 45%, var(--line)); }
+.hero.exit { --tint: var(--exit-tint); border-color: color-mix(in srgb, var(--exit) 45%, var(--line)); }
+.hero.hold { --tint: var(--long-tint); }
+.hero.err { --tint: var(--warn-tint); }
+.hero > * { position: relative; }
+.eyebrow { font-size: 12.5px; color: var(--muted); display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.state-pill { font-weight: 700; font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; padding: 3px 8px; border-radius: 999px; background: var(--panel-2); color: var(--muted); }
+.hero.buy .state-pill, .hero.hold .state-pill { background: var(--long-tint); color: var(--long); }
+.hero.exit .state-pill { background: var(--exit-tint); color: var(--exit); }
+.hero.err .state-pill { background: var(--warn-tint); color: var(--warn); }
+.hero-main { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px; align-items: center; }
+.hero h1 { font: 800 clamp(30px, 9vw, 40px)/1.02 var(--f-display); letter-spacing: -0.03em; margin: 0 0 6px; text-wrap: balance; }
+.hero.buy h1 { color: var(--long); }
+.hero.exit h1 { color: var(--exit); }
+.hero p { margin: 0; font-size: 14.5px; }
+.ring { width: 96px; text-align: center; }
+.ring svg { width: 96px; height: 96px; display: block; }
+.ring .t { margin-top: -66px; height: 66px; display: grid; align-content: start; }
+.ring b { font: 800 19px/1 var(--f-display); letter-spacing: -0.02em; }
+.ring span { font-size: 11px; color: var(--muted); margin-top: 3px; }
+.ring small { display: block; font-size: 11.5px; color: var(--muted); margin-top: 6px; }
+.btns { display: flex; gap: 10px; flex-wrap: wrap; }
+.btn { flex: 1 1 140px; min-height: 46px; border-radius: 14px; border: 1px solid var(--line); background: var(--panel-2); font-weight: 600; cursor: pointer; padding: 10px 14px; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #0B1424; }
+.btn.small { flex: 0 0 auto; min-height: 36px; padding: 6px 12px; font-size: 13.5px; border-radius: 11px; }
+.btn:disabled { opacity: .55; cursor: default; }
+
+/* činjenice */
+.facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.fact { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; min-width: 0; }
+.fact span { display: block; font-size: 11.5px; color: var(--muted); }
+.fact b { display: block; font: 700 17px/1.2 var(--f-display); letter-spacing: -0.01em; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fact em { display: block; font-style: normal; font-size: 11.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* kovanice */
+.coins { display: grid; gap: 12px; }
+.coin { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); padding: 14px; display: grid; gap: 10px; min-width: 0; }
+.coin header { display: flex; align-items: center; gap: 8px; }
+.sym { font: 800 20px/1 var(--f-display); letter-spacing: -0.02em; }
+.pill { font-size: 12px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: var(--panel-2); color: var(--muted); }
+.pill.long { background: var(--long-tint); color: var(--long); }
+.pill.act { background: var(--warn-tint); color: var(--warn); }
+.pill.act.buy { background: var(--long); color: #071815; }
+.pill.act.sell { background: var(--exit); color: #22060D; }
+.coin .px { margin-left: auto; font-weight: 700; font-size: 16px; }
+.coin .size { font-size: 14px; }
+.coin .size span { color: var(--muted); }
+.track { position: relative; height: 26px; }
+.track .base { position: absolute; left: 0; right: 0; top: 12px; height: 3px; border-radius: 2px; background: var(--panel-2); }
+.track .seg { position: absolute; top: 12px; height: 3px; border-radius: 2px; }
+.track .mk { position: absolute; top: 4px; width: 3px; height: 19px; border-radius: 2px; transform: translateX(-1.5px); }
+.track .dot { position: absolute; top: 7px; width: 13px; height: 13px; border-radius: 50%; transform: translateX(-6.5px); background: var(--text); border: 3px solid var(--panel); box-shadow: 0 0 0 1px var(--line); }
+.kv { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 0; }
+.kv div { min-width: 0; }
+.kv dt { font-size: 11.5px; color: var(--muted); display: flex; align-items: center; gap: 5px; }
+.kv dt i { width: 8px; height: 8px; border-radius: 2px; flex: none; }
+.kv dd { margin: 1px 0 0; font-weight: 600; font-size: 14.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.coin .note { margin: 0; font-size: 13px; color: var(--muted); }
+.coin .note b { color: var(--text); font-weight: 600; }
+.skel { height: 150px; border-radius: var(--r); background: linear-gradient(90deg, var(--panel) 0%, var(--panel-2) 50%, var(--panel) 100%); background-size: 200% 100%; animation: sh 1.4s linear infinite; border: 1px solid var(--line); }
+@keyframes sh { to { background-position: -200% 0; } }
+
+/* FTMO */
+.cmp { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.cmp .card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); padding: 14px; min-width: 0; display: grid; gap: 8px; }
+.cmp .card.main { border-color: color-mix(in srgb, var(--accent) 50%, var(--line)); background: linear-gradient(180deg, var(--accent-tint), transparent 70%), var(--panel); }
+.cmp h3 { margin: 0; font-size: 13px; font-weight: 700; color: var(--muted); }
+.cmp .big { font: 800 34px/1 var(--f-display); letter-spacing: -0.03em; }
+.cmp .big small { font: 500 12.5px/1.3 var(--f-ui); color: var(--muted); display: block; letter-spacing: 0; margin-top: 4px; }
+.cmp dl { margin: 0; display: grid; gap: 5px; }
+.cmp dl div { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; }
+.cmp dt { color: var(--muted); }
+.cmp dd { margin: 0; font-weight: 600; text-align: right; }
+.verdict { border-radius: 14px; padding: 12px 14px; background: var(--panel-2); font-size: 14px; }
+.verdict.good { background: var(--long-tint); }
+.verdict.bad { background: var(--exit-tint); }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); padding: 14px; display: grid; gap: 10px; min-width: 0; }
+.panel h3 { margin: 0; font: 700 16px/1.25 var(--f-display); letter-spacing: -0.01em; }
+.panel p { margin: 0; font-size: 14px; }
+.tl { list-style: none; margin: 0; padding: 0; display: grid; }
+.tl li { display: grid; grid-template-columns: 14px minmax(0, 1fr) auto; gap: 10px; padding: 9px 0; border-top: 1px solid var(--line); align-items: start; }
+.tl li:first-child { border-top: 0; }
+.tl i { width: 10px; height: 10px; border-radius: 50%; margin-top: 5px; background: var(--muted); }
+.tl i.ok { background: var(--long); }
+.tl i.bad { background: var(--exit); }
+.tl i.run { background: var(--accent); }
+.tl b { font-weight: 600; font-size: 14px; display: block; }
+.tl span { color: var(--muted); font-size: 12.5px; }
+.tl em { font-style: normal; font-size: 12.5px; color: var(--muted); white-space: nowrap; }
+details.more { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); padding: 0 14px; }
+details.more summary { cursor: pointer; padding: 14px 0; font-weight: 600; list-style: none; display: flex; justify-content: space-between; }
+details.more summary::after { content: "+"; color: var(--muted); font-weight: 700; }
+details.more[open] summary::after { content: "–"; }
+details.more > div { padding-bottom: 14px; }
+.tscroll { overflow-x: auto; margin-inline: -2px; }
+table.t { width: 100%; border-collapse: collapse; font-size: 13px; }
+table.t th { color: var(--muted); font-weight: 500; text-align: right; padding: 6px 6px; white-space: nowrap; }
+table.t td { text-align: right; padding: 7px 6px; border-top: 1px solid var(--line); white-space: nowrap; }
+table.t th:first-child, table.t td:first-child { text-align: left; }
+table.t tr.hl td { background: var(--accent-tint); }
+.up { color: var(--long); }
+.down { color: var(--exit); }
+.muted { color: var(--muted); }
+ul.fine-list { margin: 0; padding-left: 18px; color: var(--muted); font-size: 13px; display: grid; gap: 6px; }
+
+/* dnevnik */
+.jsum { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.entries { display: grid; gap: 10px; }
+.entry { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 12px 14px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; }
+.entry .s { font: 700 16px/1.2 var(--f-display); }
+.entry .d { color: var(--muted); font-size: 12.5px; }
+.entry .r { text-align: right; font-weight: 700; }
+.entry .n { grid-column: 1 / -1; font-size: 13px; color: var(--muted); }
+.empty { background: var(--panel); border: 1px dashed var(--line); border-radius: var(--r); padding: 20px 16px; text-align: center; color: var(--muted); font-size: 14px; }
+.empty b { display: block; color: var(--text); font: 700 17px/1.3 var(--f-display); margin-bottom: 4px; }
+
+/* podešavanja */
+.group { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.group h3 { margin: 0; padding: 12px 14px 4px; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 700; }
+.row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 11px 14px; border-top: 1px solid var(--line); }
+.group h3 + .row { border-top: 0; }
+.row label { font-size: 14.5px; }
+.row label small { display: block; color: var(--muted); font-size: 12px; margin-top: 1px; }
+.row input[type=number], .row select { width: 116px; min-height: 40px; border-radius: 11px; border: 1px solid var(--line); background: var(--ink); padding: 6px 10px; text-align: right; }
+.row select { text-align: left; }
+.sw { position: relative; width: 50px; height: 30px; flex: none; }
+.sw input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
+.sw span { position: absolute; inset: 0; border-radius: 999px; background: var(--panel-2); border: 1px solid var(--line); transition: background .2s; pointer-events: none; }
+.sw span::after { content: ""; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: var(--muted); transition: transform .2s, background .2s; }
+.sw input:checked + span { background: var(--long); border-color: var(--long); }
+.sw input:checked + span::after { transform: translateX(20px); background: #fff; }
+.sw input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
+.code { font-family: ui-monospace, "SF Mono", Consolas, monospace; font-size: 13px; background: var(--panel-2); padding: 2px 6px; border-radius: 6px; }
+
+/* donja traka */
+.tabs {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
+  padding: 6px max(8px, env(safe-area-inset-left, 0px)) calc(6px + env(safe-area-inset-bottom, 0px));
+  background: var(--bar-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-top: 1px solid var(--line);
+}
+.tabs-in { max-width: 560px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); }
+.tabs button { background: none; border: 0; padding: 6px 2px 4px; display: grid; justify-items: center; gap: 3px; color: var(--muted); font-size: 11.5px; font-weight: 600; cursor: pointer; border-radius: 12px; }
+.tabs button svg { width: 23px; height: 23px; }
+.tabs button[aria-current="page"] { color: var(--accent); }
+.tabs button .badge { position: absolute; }
+
+/* list za unos */
+dialog.sheet { border: 0; padding: 0; margin: auto auto 0; width: 100%; max-width: 560px; border-radius: 22px 22px 0 0; background: var(--panel); color: var(--text); box-shadow: 0 -12px 40px rgba(0,0,0,.35); }
+dialog.sheet::backdrop { background: rgba(4, 9, 18, .55); }
+.sheet form { padding: 10px 16px calc(16px + env(safe-area-inset-bottom, 0px)); display: grid; gap: 12px; }
+.grab { width: 40px; height: 5px; border-radius: 3px; background: var(--line); margin: 0 auto 4px; }
+.sheet h3 { margin: 0; font: 800 22px/1.2 var(--f-display); letter-spacing: -0.02em; }
+.sheet p { margin: -6px 0 0; color: var(--muted); font-size: 13.5px; }
+.field { display: grid; gap: 5px; }
+.field span { font-size: 12.5px; color: var(--muted); font-weight: 600; }
+.field input, .field select { min-height: 46px; border-radius: 12px; border: 1px solid var(--line); background: var(--ink); padding: 8px 12px; }
+.seg { display: grid; grid-template-columns: repeat(3, 1fr); background: var(--ink); border: 1px solid var(--line); border-radius: 12px; padding: 3px; gap: 3px; }
+.seg button { border: 0; background: none; min-height: 40px; border-radius: 9px; font-weight: 700; cursor: pointer; color: var(--muted); }
+.seg button[aria-pressed="true"] { background: var(--panel-2); color: var(--text); }
+
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(86px + env(safe-area-inset-bottom, 0px)); z-index: 30; max-width: min(520px, calc(100% - 32px)); background: var(--text); color: var(--ink); padding: 11px 16px; border-radius: 14px; font-weight: 600; font-size: 14px; box-shadow: var(--shadow); }
+.alert { border-radius: 16px; padding: 12px 14px; background: var(--warn-tint); border: 1px solid color-mix(in srgb, var(--warn) 40%, var(--line)); font-size: 14px; display: grid; gap: 8px; }
+.alert b { color: var(--warn); }
+
+/* grafikon */
+.chart-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); padding: 12px 12px 10px; display: grid; gap: 10px; min-width: 0; }
+.chart-head { display: flex; gap: 8px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+.seg.mini { display: inline-grid; grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: minmax(40px, auto); padding: 3px; }
+.seg.mini button { min-height: 32px; padding: 0 10px; font-size: 13px; }
+.chart-leg { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; padding-inline: 2px; }
+.chart-leg b { font: 800 22px/1 var(--f-display); letter-spacing: -0.02em; }
+.chart-leg span { font-size: 13px; color: var(--muted); }
+.chart-leg span.up { color: var(--long); font-weight: 600; }
+.chart-leg span.down { color: var(--exit); font-weight: 600; }
+.chart { height: 310px; margin-inline: -4px; }
+.chart-keys { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12px; color: var(--muted); padding-inline: 2px; }
+.chart-keys i { display: inline-block; width: 14px; height: 0; border-top: 2px solid; vertical-align: middle; margin-right: 5px; }
+.chart-keys i.dash { border-top-style: dashed; }
+.coin { cursor: pointer; }
+.coin.sel { border-color: color-mix(in srgb, var(--accent) 55%, var(--line)); }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="bar">
+    <div class="brand">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="13" fill="none" stroke="currentColor" stroke-opacity=".35" stroke-width="2"/><path d="M16 16 L23.5 8.5 L19.2 18.2 Z" fill="var(--long)"/><path d="M16 16 L8.5 23.5 L12.8 13.8 Z" fill="currentColor" fill-opacity=".45"/><circle cx="16" cy="16" r="2" fill="currentColor"/></svg>
+      Kompas
+    </div>
+    <div class="bar-r">
+      <span class="upd" id="upd"><i></i>Učitavam…</span>
+      <button class="icon-btn" id="sndBtn" aria-pressed="true" aria-label="Zvuk upozorenja" title="Zvuk upozorenja">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/><path id="sndOff" d="M3 3l18 18" hidden/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============ DANAS ============ -->
+    <section class="view" id="v-danas" aria-label="Danas">
+      <div class="alert" id="sndAlert" hidden><span><b>Zvuk je spreman.</b> Dodirni bilo gde jednom, pa telefon sme da pusti zvuk kad stigne nova odluka dok je Kompas otvoren.</span></div>
+      <div class="hero" id="hero">
+        <div class="eyebrow"><span class="state-pill" id="heroPill">Učitavam</span><span id="heroWhen">Kripto korpa, dnevne sveće</span></div>
+        <div class="hero-main">
+          <div>
+            <h1 id="heroHead">Učitavam korpu</h1>
+            <p id="heroWhy">Preuzimam dnevne sveće za BTC, ETH i SOL.</p>
+          </div>
+          <div class="ring" aria-label="Vreme do sledeće odluke">
+            <svg viewBox="0 0 96 96"><circle cx="48" cy="48" r="40" fill="none" stroke="var(--panel-2)" stroke-width="8"/><circle id="ringArc" cx="48" cy="48" r="40" fill="none" stroke="var(--accent)" stroke-width="8" stroke-linecap="round" stroke-dasharray="251.3" stroke-dashoffset="251.3" transform="rotate(-90 48 48)"/></svg>
+            <div class="t"><b id="ringT">—</b><span>do odluke</span></div>
+            <small id="ringAt">—</small>
+          </div>
+        </div>
+        <div class="btns"><button class="btn primary" id="bIn">Upiši ulaz</button><button class="btn" id="bOut">Upiši izlaz</button></div>
+      </div>
+      <div class="facts" id="facts">
+        <div class="fact"><span>Pozicija</span><b>—</b><em>&nbsp;</em></div>
+        <div class="fact"><span>Rizik</span><b>—</b><em>&nbsp;</em></div>
+        <div class="fact"><span>Osigurač</span><b>—</b><em>&nbsp;</em></div>
+      </div>
+      <section class="chart-card" id="chartCard" aria-label="Grafikon">
+        <div class="chart-head">
+          <div class="seg mini" id="cSym" role="group" aria-label="Kovanica"><button type="button" data-v="BTC">BTC</button><button type="button" data-v="ETH">ETH</button><button type="button" data-v="SOL">SOL</button></div>
+          <div class="seg mini" id="cTf" role="group" aria-label="Sveće"><button type="button" data-v="1d">1D</button><button type="button" data-v="4h">4h</button><button type="button" data-v="1h">1h</button><button type="button" data-v="15m">15m</button></div>
+        </div>
+        <div class="chart-leg" id="cLeg"><b>—</b><span>Učitavam sveće…</span></div>
+        <div class="chart" id="chart"></div>
+        <div class="chart-keys"><span><i style="border-color:var(--accent)"></i>Prosek</span><span><i class="dash" style="border-color:var(--accent)"></i>Prag za sutra</span><span><i style="border-color:var(--exit)"></i>Stop danas</span><span>▲ ulaz · ▼ izlaz po pravilu</span></div>
+      </section>
+      <h2 class="sec">Kovanice</h2>
+      <div class="coins" id="coins"><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
+      <p class="fine">Odluka je jednom dnevno, posle zatvaranja dnevne sveće. Stop važi do sledećeg zatvaranja. Ovo su rezultati pravila, ne finansijski savet: odluka o novcu je tvoja.</p>
+    </section>
+
+    <!-- ============ FTMO ============ -->
+    <section class="view" id="v-ftmo" aria-label="FTMO test" hidden>
+      <p class="lede">Izazov od <b id="feeTxt">89 €</b>: korak 1 +10%, korak 2 +5%, bez pada od 5% u danu i 10% ukupno. Kad padne, kupuje se nov. Svakih 30 dana od 2018. kreće po jedan trejder.</p>
+      <div id="ftOut"><div class="skel"></div></div>
+    </section>
+
+    <!-- ============ DNEVNIK ============ -->
+    <section class="view" id="v-dnevnik" aria-label="Dnevnik" hidden>
+      <div class="jsum" id="jsum"></div>
+      <div class="btns"><button class="btn primary" id="jIn2">Upiši ulaz</button><button class="btn" id="jOut2">Upiši izlaz</button></div>
+      <div class="entries" id="entries"></div>
+      <p class="fine">Dnevnik se čuva samo na ovom telefonu. Kompas na računaru ima svoj.</p>
+    </section>
+
+    <!-- ============ PODEŠAVANJA ============ -->
+    <section class="view" id="v-podesavanja" aria-label="Podešavanja" hidden>
+      <div class="group">
+        <h3>FTMO nalog</h3>
+        <div class="row"><label for="s-acct">Veličina naloga ($)</label><input id="s-acct" type="number" min="100" step="100" inputmode="decimal"></div>
+        <div class="row"><label for="s-acctType">Tip naloga<small>Swing: kripto 1:1, držanje preko vikenda</small></label><select id="s-acctType"><option value="swing">Swing</option><option value="standard">Standard</option></select></div>
+        <div class="row"><label for="s-fee">Cena izazova (€)</label><input id="s-fee" type="number" min="0" step="1" inputmode="decimal"></div>
+      </div>
+      <div class="group">
+        <h3>Pravilo</h3>
+        <div class="row"><label for="s-evo">Evolucija bira prosek i rizik<small>Samo iz izazova koji su se već završili</small></label><span class="sw"><input id="s-evo" type="checkbox"><span></span></span></div>
+        <div class="row"><label for="s-pMin">Najmanja šansa za prolaz (%)</label><input id="s-pMin" type="number" min="30" max="95" step="5" inputmode="decimal"></div>
+        <div class="row" id="r-N"><label for="s-trendN">Prosek (dana)</label><select id="s-trendN"><option value="20">20</option><option value="50">50</option><option value="100">100</option></select></div>
+        <div class="row" id="r-vol"><label for="s-trendVol">Rizik (nemir % godišnje)</label><input id="s-trendVol" type="number" min="4" max="30" step="1" inputmode="decimal"></div>
+        <div class="row"><label for="s-guard">Osigurač: gubitak u danu (%)<small>0 = bez stopa</small></label><input id="s-guard" type="number" min="0" max="4.5" step="0.5" inputmode="decimal"></div>
+        <div class="row"><label for="s-swap">Swap za kripto (% dnevno)</label><input id="s-swap" type="number" min="0" max="0.5" step="0.005" inputmode="decimal"></div>
+        <div class="row"><label for="s-cost">Trošak ulaz + izlaz (%)</label><input id="s-cost" type="number" min="0" max="1" step="0.01" inputmode="decimal"></div>
+      </div>
+      <div class="group">
+        <h3>Upozorenja</h3>
+        <div class="row"><label for="s-sound">Zvuk kad stigne nova odluka<small>Dok je Kompas otvoren</small></label><span class="sw"><input id="s-sound" type="checkbox"><span></span></span></div>
+        <div class="row"><label>Probaj zvuk</label><button class="btn small" id="sndTest" type="button">Pusti</button></div>
+        <div class="row"><label>Obaveštenja na ekranu<small id="notifState">Dok je Kompas otvoren</small></label><button class="btn small" id="notifBtn" type="button">Dozvoli</button></div>
+        <div class="row" style="grid-template-columns:1fr"><p class="fine" style="margin:0">Kad je Kompas zatvoren, zvuk daje aplikacija <b>ntfy</b> sa računara: glasna poruka za KUPI i PRODAJ, tiha za dnevni pregled. Zvuk biraš u ntfy: dodirni temu, pa Podešavanja, pa Zvuk obaveštenja.</p></div>
+      </div>
+      <div class="group">
+        <h3>Izgled</h3>
+        <div class="row"><label for="s-theme">Tema</label><select id="s-theme"><option value="">Kao telefon</option><option value="dark">Tamna</option><option value="light">Svetla</option></select></div>
+      </div>
+      <p class="fine">Isto pravilo i isti račun kao Kompas na računaru i poruke na telefonu, do poslednje decimale. Podaci: Binance, dnevne sveće od 2017. Grafikon: TradingView Lightweight Charts (Apache 2.0).</p>
+    </section>
+  </main>
+</div>
+
+<nav class="tabs" aria-label="Ekrani">
+  <div class="tabs-in">
+    <button data-v="danas" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2.2 4.8-4.8 2.2 2.2-4.8z"/></svg>Danas</button>
+    <button data-v="ftmo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>FTMO</button>
+    <button data-v="dnevnik"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h11a2 2 0 0 1 2 2v16l-3.5-2-3.5 2-3.5-2L5 21V4a1 1 0 0 1 1-1z"/><path d="M9 8h6M9 12h6"/></svg>Dnevnik</button>
+    <button data-v="podesavanja"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg>Podešavanja</button>
+  </div>
+</nav>
+
+<div class="toast" id="toast" role="status" hidden></div>
+
+<dialog class="sheet" id="jSheet" aria-labelledby="jTitle">
+  <form id="jForm" method="dialog">
+    <div class="grab"></div>
+    <h3 id="jTitle">Upiši ulaz</h3>
+    <p id="jSub">Upiši kupovinu sa FTMO naloga.</p>
+    <div class="seg" id="jSym" role="group" aria-label="Kovanica"><button type="button" data-v="BTC">BTC</button><button type="button" data-v="ETH">ETH</button><button type="button" data-v="SOL">SOL</button></div>
+    <label class="field"><span id="jPxLbl">Cena ulaza</span><input id="jPx" type="number" step="any" min="0" inputmode="decimal" required></label>
+    <label class="field" id="jQtyF"><span>Količina</span><input id="jQty" type="number" step="any" min="0" inputmode="decimal"></label>
+    <label class="field"><span>Beleška</span><input id="jNote" type="text" maxlength="200" placeholder="npr. ušao po planu"></label>
+    <div class="btns"><button class="btn" type="button" id="jCancel">Otkaži</button><button class="btn primary" type="submit">Sačuvaj</button></div>
+  </form>
+</dialog>
+
+<script src="lightweight-charts.js"></script>
+<script>
+"use strict";
+const $ = (s) => document.querySelector(s);
+const MIN = 60000, HOUR = 3600000, DAY = 86400000;
+const utcDay = (t) => Math.floor(t / DAY);
+const nf = (x, d = 2) => (Number.isFinite(x) ? x.toLocaleString("sr-Latn-RS", { minimumFractionDigits: d, maximumFractionDigits: d }) : "—");
+const sgn = (x, d = 2) => (Number.isFinite(x) ? (x >= 0 ? "+" : "−") + nf(Math.abs(x), d) : "—");
+const npx = (x) => nf(x, x >= 10000 ? 0 : 2);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const tFmt = new Intl.DateTimeFormat("sr-Latn-RS", { hour: "2-digit", minute: "2-digit" });
+const dmFmt = new Intl.DateTimeFormat("sr-Latn-RS", { day: "2-digit", month: "2-digit" });
+const dyFmt = new Intl.DateTimeFormat("sr-Latn-RS", { day: "2-digit", month: "2-digit", year: "numeric" });
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const store = {
+  get(k, d) { try { const v = localStorage.getItem("km." + k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem("km." + k, JSON.stringify(v)); } catch (e) { /* bez memorije */ } },
+};
+
+/* Podrazumevano isto kao u Kompasu na računaru */
+const DEF = { acct: 10000, acctType: "swing", fee: 89, evo: true, pMin: 60, trendN: 50, trendVol: 10, guard: 4, swap: 0.03, cost: 0.08, sound: true, theme: "" };
+function loadSet() {
+  const s = Object.assign({}, DEF, store.get("set", {}));
+  for (const k of Object.keys(DEF)) if (typeof DEF[k] === "number" && !Number.isFinite(+s[k])) s[k] = DEF[k]; else if (typeof DEF[k] === "number") s[k] = +s[k];
+  s.trendN = [20, 50, 100].includes(s.trendN) ? s.trendN : 50;
+  s.acctType = s.acctType === "standard" ? "standard" : "swing";
+  return s;
+}
+let SET = loadSet();
+
+/* =====================================================================
+   MOTOR: prepisan iz Kompasa bez ijedne izmene (isti račun kao na računaru i u porukama)
+   ===================================================================== */
+const KR = [["BTC", "BTCUSDT"], ["ETH", "ETHUSDT"], ["SOL", "SOLUSDT"]];
+const KR_FROM = Date.UTC(2017, 7, 1);
+const KR_VOL_LB = 60, KR_BAND = 0.25, KR_SLIP = 0.005, KR_GAP = 1, KR_MAXW = 3;
+const KR_DEC = { BTC: 4, ETH: 3, SOL: 2 };
+const EVO_N = [20, 50, 100], EVO_VOL = [8, 10, 12, 15, 20, 25];
+const EVO_GRID = 7, EVO_MIN_N = 30, EVO_CAP = 365;
+const FTMO_R = { t1: 0.10, t2: 0.05, maxLoss: 0.10, daily: 0.05, minDays: 4 };
+const EVO_CFGS = [];
+for (const N of EVO_N) for (const vt of EVO_VOL) EVO_CFGS.push({ N, vt });
+const EVO_DEF = EVO_CFGS.findIndex((c) => c.N === 50 && c.vt === 10);
+const cfgLabel = (c) => `prosek ${c.N}, rizik ${c.vt}%`;
+const krLev = () => (SET.acctType === "standard" ? 3.3 : 1);
+const krOpt = () => ({ guard: SET.guard, cost: SET.cost, swap: SET.swap, lev: krLev(), pMin: SET.pMin / 100 });
+const KRS = { K: null, loadedT: 0, loading: false, again: false, err: null, prices: {}, evo: null, live: null };
+
+/* Dnevne sveće sve tri kovanice na zajedničkom kalendaru. Dan bez sveće dobija prethodno zatvaranje. */
+function alignKorpa(raw) {
+  const names = KR.map((x) => x[0]);
+  const t0 = Math.min(...names.map((k) => raw[k][0].t)), t1 = Math.min(...names.map((k) => raw[k][raw[k].length - 1].t));
+  const days = [];
+  for (let t = t0; t <= t1; t += DAY) days.push(t);
+  const n = days.length, m = names.length;
+  const A = names.map((k) => {
+    const map = new Map(raw[k].map((b) => [b.t, b])), c = new Float64Array(n).fill(NaN), l = new Float64Array(n).fill(NaN);
+    let last = NaN;
+    for (let i = 0; i < n; i++) {
+      const b = map.get(days[i]);
+      if (b) { c[i] = b.c; l[i] = b.l; last = b.c; } else if (Number.isFinite(last)) { c[i] = last; l[i] = last; }
+    }
+    return { name: k, c, l };
+  });
+  const R = new Float64Array(n * m), LR = new Float64Array(n * m), vol = new Float64Array(n * m).fill(NaN);
+  for (let a = 0; a < m; a++) {
+    const c = A[a].c, l = A[a].l;
+    for (let i = 1; i < n; i++) if (Number.isFinite(c[i - 1]) && Number.isFinite(c[i])) { R[i * m + a] = c[i] / c[i - 1] - 1; LR[i * m + a] = l[i] / c[i - 1] - 1; }
+    // nemir: standardna devijacija poslednjih 60 dnevnih prinosa (bar 30), na godišnjem nivou
+    for (let i = 1; i < n; i++) {
+      const rs = [];
+      for (let j = Math.max(1, i - KR_VOL_LB + 1); j <= i; j++) if (Number.isFinite(c[j - 1]) && Number.isFinite(c[j])) rs.push(R[j * m + a]);
+      if (rs.length < KR_VOL_LB / 2) continue;
+      let s = 0;
+      for (const x of rs) s += x;
+      const mu = s / rs.length;
+      let q = 0;
+      for (const x of rs) q += (x - mu) * (x - mu);
+      vol[i * m + a] = Math.sqrt(q / (rs.length - 1)) * Math.sqrt(365);
+    }
+  }
+  return { days, A, n, m, R, LR, vol, sigCache: new Map() };
+}
+
+/* 1 = zatvaranje iznad proseka poslednjih N dana (uključujući taj dan) */
+function krSig(K, N) {
+  if (K.sigCache.has(N)) return K.sigCache.get(N);
+  const { n, m, A } = K, sig = new Uint8Array(n * m);
+  for (let a = 0; a < m; a++) {
+    const c = A[a].c;
+    for (let i = N - 1; i < n; i++) {
+      let s = 0, ok = true;
+      for (let j = i - N + 1; j <= i; j++) { if (!Number.isFinite(c[j])) { ok = false; break; } s += c[j]; }
+      if (ok && c[i] > s / N) sig[i * m + a] = 1;
+    }
+  }
+  K.sigCache.set(N, sig);
+  return sig;
+}
+
+/* Pozicija posle zatvaranja dana i (× naloga). Važi tokom dana i+1. Menja se tek kad cilj odstupi više od 25%. */
+function krWeights(K, N, vt, lev) {
+  const { n, m, vol } = K, sig = krSig(K, N), W = new Float64Array(n * m), cur = new Float64Array(m), tgt = new Float64Array(m);
+  for (let i = 0; i < n; i++) {
+    let nAct = 0;
+    for (let a = 0; a < m; a++) if (vol[i * m + a] > 0) nAct++;
+    const per = vt / 100 / Math.sqrt(Math.max(nAct, 1));
+    let g = 0;
+    for (let a = 0; a < m; a++) { const v = vol[i * m + a]; tgt[a] = v > 0 && sig[i * m + a] === 1 ? Math.min(KR_MAXW, per / v) : 0; g += tgt[a]; }
+    if (g > lev) for (let a = 0; a < m; a++) tgt[a] = tgt[a] * lev / g;
+    for (let a = 0; a < m; a++) {
+      const t = tgt[a], c = cur[a];
+      if ((t > 0) !== (c > 0) || Math.abs(t - c) > KR_BAND * Math.abs(c)) cur[a] = t;
+      W[i * m + a] = cur[a];
+    }
+  }
+  return W;
+}
+
+/* Rezultat svakog dana kao deo početnog naloga. Osigurač: za svaki dan stop na svakoj kovanici,
+   na padu d = osigurač / ukupna pozicija od jučerašnjeg zatvaranja. Ako sve tri padnu do stopa, nalog izgubi
+   tačno osigurač (plus klizanje), pa dnevni limit od 5% ostaje netaknut. Izbačena kovanica ulazi ponovo sutra. */
+function krDays(K, W, guard, costPct, swapPct) {
+  const { n, m, R, LR } = K, half = costPct / 200, sw = swapPct / 100;
+  const pnl = new Float64Array(n), worst = new Float64Array(n), cCont = new Float64Array(n), cFresh = new Float64Array(n), stopped = new Uint8Array(n * m);
+  for (let i = 1; i < n; i++) {
+    let G = 0;
+    for (let a = 0; a < m; a++) G += W[(i - 1) * m + a];
+    const d = guard > 0 && G > 0 ? guard / 100 / G : Infinity;
+    let p = 0, w = 0, cc = 0, cf = 0, sc = 0, s = 0;
+    for (let a = 0; a < m; a++) {
+      const h = W[(i - 1) * m + a], hp = i >= 2 ? W[(i - 2) * m + a] : 0, prevFlat = i >= 2 && stopped[(i - 1) * m + a] === 1;
+      cc += Math.abs(h - (prevFlat ? 0 : hp)) * half;
+      cf += h * half;
+      if (h === 0) continue;
+      const lr = LR[i * m + a];
+      if (lr <= -d) { const r = (1 - d) * (1 - KR_SLIP) - 1; stopped[i * m + a] = 1; p += h * r; w += h * r; sc += h * half; }
+      else { p += h * R[i * m + a]; w += h * lr; }
+      s += h * sw;
+    }
+    pnl[i] = p - cc - sc - s; worst[i] = w - cc - sc - s; cCont[i] = cc; cFresh[i] = cf;
+  }
+  return { W, pnl, worst, cCont, cFresh, stopped };
+}
+
+/* Jedan FTMO izazov od dana s: korak 1 (+10%), pa korak 2 (+5%), oba bez pada od 5% u danu i 10% ukupno.
+   Gubitak se meri i tokom dana (dnevni minimum). Cilj se meri na zatvaranju dana. */
+function krAttempt(D, s, cap) {
+  const n = D.pnl.length, end = Math.min(n - 1, s + cap - 1);
+  let E = 1, phase = 1, ps = s;
+  for (let i = s; i <= end; i++) {
+    if (i < ps) continue;
+    const adj = i === ps ? D.cCont[i] - D.cFresh[i] : 0;
+    const w = D.worst[i] + adj;
+    if (w <= -FTMO_R.daily) return { why: "dnevni", phase, end: i, s };
+    if (E + w <= 1 - FTMO_R.maxLoss) return { why: "ukupni", phase, end: i, s };
+    E += D.pnl[i] + adj;
+    if (i - ps + 1 >= FTMO_R.minDays && E >= 1 + (phase === 1 ? FTMO_R.t1 : FTMO_R.t2)) {
+      if (phase === 2) return { why: "ok", phase, end: i, s };
+      phase = 2; E = 1; ps = i + 1 + KR_GAP;
+    }
+  }
+  return { why: "traje", phase, end, s };
+}
+
+/* Izbor parametara za dan d, samo iz izazova koji su se završili PRE dana d.
+   Najbrži očekivani put do finansiranog naloga (sa ponovnim kupovinama), među onima čija je šansa
+   da prođu oba koraka bar pMin. Izazov duži od godinu dana računa se kao neuspeh. */
+function evoChoose(acc, pMin) {
+  let best = -1, bestET = Infinity;
+  for (let c = 0; c < acc.length; c++) {
+    const a = acc[c];
+    if (a.cnt < EVO_MIN_N || a.pass === 0) continue;
+    const p = a.pass / a.cnt;
+    if (p < pMin) continue;
+    const Ds = a.ds / a.pass, Df = a.cnt > a.pass ? a.df / (a.cnt - a.pass) : 0;
+    const ET = Ds + (1 - p) / p * Df;
+    if (ET < bestET) { bestET = ET; best = c; }
+  }
+  if (best >= 0) return [best, 0];
+  let bestP = -1;
+  for (let c = 0; c < acc.length; c++) {
+    const a = acc[c];
+    if (a.cnt < EVO_MIN_N) continue;
+    const p = a.pass / a.cnt;
+    if (p > bestP) { bestP = p; best = c; }
+  }
+  if (best >= 0) return [best, 1];
+  return [EVO_DEF, 2];
+}
+
+function krEvolve(K, opt) {
+  const n = K.n, sMin = Math.max(...EVO_N) + KR_VOL_LB;
+  const D = EVO_CFGS.map((c) => krDays(K, krWeights(K, c.N, c.vt, opt.lev), opt.guard, opt.cost, opt.swap));
+  const ev = [];
+  for (let s = sMin; s < n; s++) {
+    if (utcDay(K.days[s]) % EVO_GRID !== 0) continue;
+    for (let c = 0; c < EVO_CFGS.length; c++) {
+      const o = krAttempt(D[c], s, EVO_CAP);
+      if (o.why !== "traje") ev.push({ k: o.end + 1, c, pass: o.why === "ok", dur: o.end - s + 1 });
+      else if (s + EVO_CAP <= n) ev.push({ k: s + EVO_CAP, c, pass: false, dur: EVO_CAP });
+    }
+  }
+  ev.sort((x, y) => x.k - y.k || x.c - y.c);
+  const acc = EVO_CFGS.map(() => ({ cnt: 0, pass: 0, ds: 0, df: 0 }));
+  const pick = new Int16Array(n + 1), why = new Uint8Array(n + 1), sP = new Float64Array(n + 1), sET = new Float64Array(n + 1), sN = new Int32Array(n + 1);
+  let q = 0, first = -1;
+  for (let d = 0; d <= n; d++) {
+    while (q < ev.length && ev[q].k <= d) { const e = ev[q++], a = acc[e.c]; a.cnt++; if (e.pass) { a.pass++; a.ds += e.dur; } else a.df += e.dur; }
+    const [c, w] = evoChoose(acc, opt.pMin), a = acc[c];
+    pick[d] = c; why[d] = w; sN[d] = a.cnt;
+    sP[d] = a.cnt ? a.pass / a.cnt : NaN;
+    sET[d] = a.pass ? a.ds / a.pass + (a.cnt > a.pass ? (a.cnt - a.pass) / a.pass * (a.df / (a.cnt - a.pass)) : 0) : NaN;
+    if (first < 0 && w !== 2) first = d;
+  }
+  return { D, pick, why, sP, sET, sN, first, acc, nEv: ev.length, opt };
+}
+
+function krMetrics(tr, n) {
+  const t6 = tr.filter((x) => x.t0 <= n - 1 - 183), t12 = tr.filter((x) => x.t0 <= n - 1 - 365);
+  const share = (arr, lim) => (arr.length ? arr.filter((x) => x.funded !== null && x.funded <= lim).length / arr.length : NaN);
+  const ds = t12.map((x) => (x.funded !== null && x.funded <= 365 ? x.funded : Infinity)).sort((a, b) => a - b);
+  let dn = 0, uk = 0, att = 0;
+  for (const x of tr) { dn += x.fails.dnevni; uk += x.fails.ukupni; att += x.fees; }
+  return { n6: t6.length, n12: t12.length, f6: share(t6, 183), f12: share(t12, 365), med: ds.length ? ds[Math.floor((ds.length - 1) / 2)] : NaN,
+           fees: t12.length ? t12.reduce((s, x) => s + x.fees12, 0) / t12.length : NaN, dn, uk, att };
+}
+
+function krTraders(K, E) {
+  const n = K.n, first = E.first, starts = [];
+  if (first < 0) return null;
+  for (let t = first; t < n - 30; t += 30) starts.push(t);
+  const cache = new Map();
+  const att = (c, s) => { const key = c * (n + 1) + s; let o = cache.get(key); if (!o) { o = krAttempt(E.D[c], s, Infinity); cache.set(key, o); } return o; };
+  const strats = [{ key: "evo", label: "Evolucija", at: (d) => E.pick[d] }].concat(EVO_CFGS.map((c, k) => ({ key: "c" + k, label: cfgLabel(c), at: () => k, k })));
+  for (const st of strats) {
+    st.tr = starts.map((t0) => {
+      let d = t0, fees = 0, fees12 = 0, funded = null;
+      const fails = { dnevni: 0, ukupni: 0 };
+      while (d < n) {
+        const o = att(st.at(d), d);
+        fees++; if (d <= t0 + 364) fees12++;
+        if (o.why === "ok") { funded = o.end - t0 + 1; break; }
+        if (o.why === "traje") break;
+        fails[o.why]++; d = o.end + 1;
+      }
+      return { t0, funded, fees, fees12, fails };
+    });
+    st.m = krMetrics(st.tr, n);
+  }
+  // jedan neprekidan put kroz istoriju: posle svakog ishoda odmah nov izazov (za dnevnik grešaka)
+  const chain = [];
+  for (let d = first; d < n;) {
+    const c = E.pick[d], o = att(c, d);
+    const item = { s: d, c, why: E.why[d], p: E.sP[d], et: E.sET[d], cnt: E.sN[d], o, cause: null };
+    if (o.why === "dnevni" || o.why === "ukupni") {
+      const W = E.D[c].W, i = o.end;
+      let worst = 0, name = null, lr = 0;
+      for (let a = 0; a < K.m; a++) { const x = W[(i - 1) * K.m + a] * K.LR[i * K.m + a]; if (x < worst) { worst = x; name = K.A[a].name; lr = K.LR[i * K.m + a]; } }
+      const dayLoss = E.D[c].worst[i];
+      item.cause = o.why === "ukupni" && dayLoss > -0.02 ? "postepen pad, bez jednog velikog dana" : name ? `${name} ${sgn(lr * 100, 0)}% tokom dana, nalog ${sgn(dayLoss * 100, 1)}%` : null;
+    }
+    chain.push(item);
+    if (o.why === "traje") break;
+    d = o.end + 1;
+  }
+  return { K, E, strats, chain, first, starts };
+}
+
+
+/* =====================================================================
+   PODACI
+   ===================================================================== */
+const API = ["https://api.binance.com/api/v3", "https://data-api.binance.vision/api/v3"];
+async function getJSON(path) {
+  let err = null;
+  for (const base of API) {
+    try { const r = await fetch(base + path, { cache: "no-store" }); if (r.ok) return await r.json(); err = new Error(`Binance je vratio grešku ${r.status}`); }
+    catch (e) { err = e; }
+  }
+  throw err || new Error("nema veze");
+}
+async function fetchDaily(sym, from) {
+  const out = [];
+  let s = from;
+  const now = Date.now();
+  while (s < now) {
+    const rows = await getJSON(`/klines?symbol=${sym}&interval=1d&startTime=${s}&endTime=${now}&limit=1000`);
+    if (!Array.isArray(rows) || !rows.length) break;
+    for (const k of rows) if (!out.length || k[0] > out[out.length - 1].t) out.push({ t: k[0], l: +k[3], c: +k[4], closeT: k[6] });
+    if (rows.length < 1000) break;
+    s = rows[rows.length - 1][0] + DAY;
+  }
+  while (out.length && out[out.length - 1].closeT >= Date.now()) out.pop();
+  return out;
+}
+
+let RAW = null, ST = null, PRICES = {}, loading = false, lastErr = null, lastOk = 0;
+function rawFromCache() {
+  const c = store.get("raw", null);
+  if (!c || !KR.every(([k]) => Array.isArray(c[k]) && c[k].length > 200)) return null;
+  const r = {};
+  for (const [k] of KR) r[k] = c[k].map((x) => ({ t: x[0], l: x[1], c: x[2] }));
+  return r;
+}
+function rawToCache(r) { const c = {}; for (const [k] of KR) c[k] = r[k].map((x) => [x.t, x.l, x.c]); store.set("raw", c); }
+
+async function refresh(force) {
+  if (loading) return;
+  const due = force || !RAW || !ST || Date.now() >= ST.K.days[ST.K.n - 1] + 2 * DAY + MIN || Date.now() - lastOk > 30 * MIN;
+  if (!due) return;
+  loading = true; setUpd("load");
+  try {
+    const next = {};
+    for (const [k, sym] of KR) {
+      const old = RAW && RAW[k] ? RAW[k] : [];
+      const from = old.length ? old[old.length - 1].t + DAY : KR_FROM;
+      const add = await fetchDaily(sym, from);
+      next[k] = old.concat(add.filter((x) => !old.length || x.t > old[old.length - 1].t));
+      if (next[k].length < 200) throw new Error(`premalo dnevnih sveća za ${k}`);
+    }
+    const changed = !RAW || KR.some(([k]) => next[k].length !== RAW[k].length);
+    RAW = next; rawToCache(RAW); lastOk = Date.now(); lastErr = null;
+    if (changed || !ST) compute();
+    checkNews();
+  } catch (e) {
+    lastErr = e.message || String(e);
+  } finally {
+    loading = false; setUpd(); renderAll();
+  }
+}
+async function pollPrices() {
+  try {
+    const j = await getJSON(`/ticker/price?symbols=${encodeURIComponent(JSON.stringify(KR.map((x) => x[1])))}`);
+    for (const x of j) { const k = KR.find((y) => y[1] === x.symbol); if (k) PRICES[k[0]] = +x.price; }
+    if (ST) renderDanas();
+  } catch (e) { /* cena uživo nije obavezna */ }
+}
+
+function compute() {
+  const K = alignKorpa(RAW), opt = krOpt(), E = krEvolve(K, opt);
+  const cfg = SET.evo ? EVO_CFGS[E.pick[K.n]] : { N: SET.trendN, vt: SET.trendVol };
+  ST = { K, E, opt, cfg, W: krWeights(K, cfg.N, cfg.vt, opt.lev), ftmo: null };
+}
+
+/* =====================================================================
+   DNEVNIK
+   ===================================================================== */
+function journal() { const j = store.get("journal", []); return Array.isArray(j) ? j : []; }
+function saveJournal(j) { store.set("journal", j.slice(-500)); }
+
+/* Stanje za danas: isto kao kartica „Šta da radim“ u Kompasu */
+function stateNow() {
+  const { K, W, cfg } = ST, { n, m } = K, i = n - 1, N = cfg.N;
+  let G = 0;
+  for (let a = 0; a < m; a++) G += W[i * m + a];
+  const d = SET.guard > 0 && G > 0 ? SET.guard / 100 / G : Infinity;
+  const jr = journal(), useJ = jr.length > 0;
+  const rows = K.A.map((A, a) => {
+    const w = W[i * m + a], wPrev = W[(i - 1) * m + a], c = A.c;
+    let S = 0;
+    for (let j = i - N + 2; j <= i; j++) S += c[j];
+    const thr = S / (N - 1), px = PRICES[A.name] || c[i];
+    let since = null;
+    if (w > 0) { let j = i; while (j > 0 && W[(j - 1) * m + a] > 0) j--; since = K.days[j] + DAY; }
+    const open = jr.find((e) => e.sym === A.name && !e.outT) || null;
+    const usd = w * SET.acct, qty = usd / px, stop = w > 0 && d < 0.9 ? c[i] * (1 - d) : null;
+    let act = null;
+    if (useJ) {
+      if (w > 0 && !open) act = "kupi";
+      else if (w === 0 && open) act = "prodaj";
+      else if (w > 0 && open && wPrev > 0 && w !== wPrev) act = "velicina";
+    } else if (w > 0 && wPrev === 0) act = "kupi";
+    else if (w === 0 && wPrev > 0) act = "prodaj";
+    else if (w > 0 && wPrev > 0 && w !== wPrev) act = "velicina";
+    return { name: A.name, w, wPrev, thr, px, close: c[i], since, open, usd, qty, stop, act, fresh: w > 0 && wPrev === 0 };
+  });
+  return { rows, G, d, useJ, lastT: K.days[i] };
+}
+
+/* =====================================================================
+   ZVUK I OBAVEŠTENJA
+   ===================================================================== */
+let actx = null;
+function unlockAudio() {
+  if (!SET.sound) return;
+  try {
+    if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+    if (actx.state === "suspended") actx.resume();
+  } catch (e) { actx = null; }
+  $("#sndAlert").hidden = true;
+}
+document.addEventListener("pointerdown", unlockAudio, { passive: true });
+/* Kupi: dva tona naviše. Prodaj: dva tona naniže. Ponavlja se tri puta. */
+function chime(kind) {
+  if (!SET.sound || !actx) return false;
+  const seq = kind === "sell" ? [880, 587] : kind === "info" ? [784] : [587, 880];
+  const t0 = actx.currentTime + 0.05;
+  for (let r = 0; r < (kind === "info" ? 1 : 3); r++) seq.forEach((f, k) => {
+    const t = t0 + r * 0.75 + k * 0.2, o = actx.createOscillator(), g = actx.createGain();
+    o.type = "sine"; o.frequency.value = f;
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.32, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.42);
+    o.connect(g).connect(actx.destination); o.start(t); o.stop(t + 0.45);
+  });
+  return true;
+}
+async function systemNotify(title, body) {
+  if (!("Notification" in window) || Notification.permission !== "granted") return;
+  try {
+    const reg = navigator.serviceWorker ? await navigator.serviceWorker.getRegistration() : null;
+    const opts = { body, icon: "ikone/ikona-192.png", badge: "ikone/ikona-192.png", tag: "kompas-odluka", renotify: true, vibrate: [300, 120, 300, 120, 600] };
+    if (reg) await reg.showNotification(title, opts); else new Notification(title, opts);
+  } catch (e) { /* bez obaveštenja */ }
+}
+function alertUser(title, body, kind) {
+  const played = chime(kind);
+  if (navigator.vibrate) { try { navigator.vibrate([300, 120, 300, 120, 600]); } catch (e) { /* */ } }
+  systemNotify(title, body);
+  toast(title);
+  if (!played && SET.sound) $("#sndAlert").hidden = false;
+}
+/* Posle nove dnevne sveće: upozori jednom ako treba nešto uraditi */
+function checkNews() {
+  if (!ST) return;
+  const st = stateNow(), seen = store.get("seen", null), key = `${ST.cfg.N}/${ST.cfg.vt}`, prevPick = store.get("pick", null);
+  if (seen !== st.lastT) {
+    const acts = st.rows.filter((r) => r.act);
+    if (seen !== null && acts.length) {
+      const sell = acts.some((r) => r.act === "prodaj") && !acts.some((r) => r.act === "kupi");
+      alertUser("Kompas: " + acts.map((r) => `${actWord(r.act)} ${r.name}`).join(", "), "Otvori Kompas za veličinu i stop.", sell ? "sell" : "buy");
+    }
+    store.set("seen", st.lastT);
+  }
+  if (SET.evo && prevPick && prevPick !== key) alertUser(`Evolucija: prosek ${ST.cfg.N}, rizik ${ST.cfg.vt}%`, "Promenila je parametre korpe.", "info");
+  if (SET.evo) store.set("pick", key);
+}
+const actWord = (a) => (a === "kupi" ? "KUPI" : a === "prodaj" ? "PRODAJ" : a === "velicina" ? "VELIČINA" : "");
+let toastT = null;
+function toast(t) { const el = $("#toast"); el.textContent = t; el.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => { el.hidden = true; }, 3200); }
+
+/* =====================================================================
+   PRIKAZ
+   ===================================================================== */
+function setUpd(kind) {
+  const el = $("#upd");
+  if (kind === "load") { el.className = "upd"; el.innerHTML = "<i></i>Osvežavam…"; return; }
+  if (lastErr && !ST) { el.className = "upd err"; el.innerHTML = "<i></i>Nema veze"; return; }
+  if (lastErr) { el.className = "upd err"; el.innerHTML = `<i></i>Bez veze, podaci od ${tFmt.format(lastOk || Date.now())}`; return; }
+  el.className = "upd ok"; el.innerHTML = `<i></i>Osveženo ${tFmt.format(lastOk || Date.now())}`;
+}
+
+function renderRing() {
+  const now = Date.now(), next = (utcDay(now) + 1) * DAY, left = next - now, frac = 1 - left / DAY;
+  $("#ringArc").setAttribute("stroke-dashoffset", String(251.3 * (1 - frac)));
+  const h = Math.floor(left / HOUR), mi = Math.floor((left % HOUR) / MIN);
+  $("#ringT").textContent = `${h}:${String(mi).padStart(2, "0")}`;
+  $("#ringAt").textContent = `u ${tFmt.format(next)}`;
+}
+
+function trackHtml(r) {
+  const vals = [r.thr, r.px].concat(r.stop ? [r.stop] : []);
+  let lo = Math.min(...vals), hi = Math.max(...vals);
+  const pad = (hi - lo) * 0.18 || hi * 0.02;
+  lo -= pad; hi += pad;
+  const pos = (v) => ((v - lo) / (hi - lo)) * 100;
+  const a = Math.min(pos(r.thr), pos(r.px)), b = Math.max(pos(r.thr), pos(r.px));
+  const above = r.px >= r.thr, col = above ? "var(--long)" : "var(--exit)";
+  return `<div class="track" aria-hidden="true"><div class="base"></div>`
+    + `<div class="seg" style="left:${a}%;width:${b - a}%;background:${col};opacity:.7"></div>`
+    + (r.stop ? `<div class="mk" style="left:${pos(r.stop)}%;background:var(--exit)"></div>` : "")
+    + `<div class="mk" style="left:${pos(r.thr)}%;background:var(--accent)"></div>`
+    + `<div class="dot" style="left:${pos(r.px)}%"></div></div>`;
+}
+
+function renderDanas() {
+  renderRing();
+  const hero = $("#hero");
+  if (!ST) {
+    hero.className = "hero" + (lastErr ? " err" : "");
+    $("#heroPill").textContent = lastErr ? "Nema veze" : "Učitavam";
+    $("#heroHead").textContent = lastErr ? "Nema podataka" : "Učitavam korpu";
+    $("#heroWhy").textContent = lastErr ? `Binance se ne javlja (${lastErr}). Proveri internet, pokušaću ponovo za minut.` : "Preuzimam dnevne sveće za BTC, ETH i SOL. Prvi put traje nekoliko sekundi.";
+    return;
+  }
+  const st = stateNow(), acts = st.rows.filter((r) => r.act), longs = st.rows.filter((r) => r.w > 0);
+  const buys = acts.filter((r) => r.act === "kupi"), sells = acts.filter((r) => r.act === "prodaj"), sizes = acts.filter((r) => r.act === "velicina");
+  let kind = "wait", pill = "Van tržišta", head = "Van tržišta", why = "Nijedna kovanica nije iznad proseka. Danas nema trejda.";
+  const names = (arr) => arr.map((r) => r.name).join(" i ");
+  if (buys.length) { kind = "buy"; pill = "Akcija"; head = "Kupi " + names(buys); why = buys.map((r) => `${r.name}: ${nf(r.qty, KR_DEC[r.name])} ${r.name}, oko ${nf(r.usd, 0)} $.`).join(" ") + (buys.some((r) => !r.fresh) ? " Trend je već long, a u dnevniku nemaš ulaz." : " Dnevna sveća je zatvorila iznad proseka."); }
+  else if (sells.length) { kind = "exit"; pill = "Akcija"; head = "Prodaj " + names(sells); why = "Prodaj celu poziciju. " + (st.useJ && sells.every((r) => r.wPrev === 0) ? "Trend je van tržišta, a u dnevniku imaš otvoren ulaz." : "Dnevna sveća je zatvorila ispod proseka."); }
+  else if (sizes.length) { kind = "hold"; pill = "Akcija"; head = "Promeni veličinu"; why = sizes.map((r) => `${r.name}: nova veličina ${nf(r.qty, KR_DEC[r.name])} ${r.name}.`).join(" ") + " Nemir tržišta se promenio."; }
+  else if (longs.length) { kind = "hold"; pill = "U poziciji"; head = "Drži " + names(longs); why = "Nema promena. Postavi stopove za danas, pa ne gledaj grafikon do sledeće odluke."; }
+  hero.className = "hero " + kind;
+  $("#heroPill").textContent = pill;
+  $("#heroWhen").textContent = `posle sveće ${dyFmt.format(st.lastT)}`;
+  $("#heroHead").textContent = head;
+  $("#heroWhy").textContent = why;
+  $("#bOut").hidden = !journal().some((e) => !e.outT);
+
+  const evoTxt = SET.evo ? `evolucija, ${nf(ST.E.sP[ST.K.n] * 100, 0)}%` : "ručno podešeno";
+  $("#facts").innerHTML = `<div class="fact"><span>Pozicija</span><b>${nf(st.G, 2)}×</b><em>${nf(st.G * SET.acct, 0)} $ ukupno</em></div>`
+    + `<div class="fact"><span>Rizik</span><b>${ST.cfg.vt}%</b><em>${evoTxt}</em></div>`
+    + `<div class="fact"><span>Osigurač</span><b>${SET.guard > 0 ? nf(SET.guard, 1) + "%" : "isključen"}</b><em>${SET.acctType === "standard" ? "Standard nalog" : "Swing nalog"}</em></div>`;
+
+  $("#coins").innerHTML = st.rows.map((r) => {
+    const dist = (r.px / r.thr - 1) * 100;
+    const pill = r.w > 0 ? `<span class="pill long">Long</span>` : `<span class="pill">Van tržišta</span>`;
+    const act = r.act ? `<span class="pill act ${r.act === "kupi" ? "buy" : r.act === "prodaj" ? "sell" : ""}">${actWord(r.act)}</span>` : "";
+    const size = r.w > 0 ? `<div class="size"><b>${nf(r.qty, KR_DEC[r.name])} ${r.name}</b> <span>· ${nf(r.usd, 0)} $ · ${nf(r.w, 2)}× naloga${r.since ? ` · od ${dmFmt.format(r.since)}` : ""}</span></div>` : "";
+    const note = r.w > 0
+      ? (r.px < r.thr ? `<b>Ako dnevna sveća zatvori ovde, sutra izlaz.</b>` : `Izlaz tek ako dnevna sveća zatvori ispod praga.`)
+      : (r.px > r.thr ? `<b>Ako dnevna sveća zatvori ovde, sutra ulaz.</b>` : `Ulaz tek ako dnevna sveća zatvori iznad praga.`);
+    const jr = st.useJ ? (r.open ? " U dnevniku: otvoreno." : "") : "";
+    return `<article class="coin${r.name === chSym ? " sel" : ""}" data-sym="${r.name}"><header><span class="sym">${r.name}</span>${pill}${act}<span class="px">${npx(r.px)}</span></header>${size}${trackHtml(r)}`
+      + `<dl class="kv"><div><dt><i style="background:var(--accent)"></i>Prag ${ST.cfg.N} d</dt><dd>${npx(r.thr)}</dd></div>`
+      + `<div><dt><i style="background:var(--exit)"></i>Stop danas</dt><dd>${r.stop ? npx(r.stop) : "—"}</dd></div>`
+      + `<div><dt><i style="background:var(--text)"></i>Od praga</dt><dd class="${dist >= 0 ? "up" : "down"}">${sgn(dist, 1)}%</dd></div></dl>`
+      + `<p class="note">${note}${jr}</p></article>`;
+  }).join("");
+  drawChart(false);
+}
+
+/* =====================================================================
+   GRAFIKON: japanske sveće (ista biblioteka kao Kompas na računaru)
+   Na dnevnim svećama: prosek N dana, prag za sutra, stop za danas i ulazi/izlazi po pravilu.
+   ===================================================================== */
+const LWC = window.LightweightCharts;
+const TFS = { "1d": { label: "1D", limit: 400, fit: 120 }, "4h": { label: "4h", limit: 500, fit: 120 }, "1h": { label: "1h", limit: 500, fit: 96 }, "15m": { label: "15m", limit: 500, fit: 96 } };
+let chSym = KR.some((k) => k[0] === store.get("chSym", "BTC")) ? store.get("chSym", "BTC") : "BTC";
+let chTf = TFS[store.get("chTf", "1d")] ? store.get("chTf", "1d") : "1d";
+let CH = null, chData = null, chReq = 0, chLines = [];
+const chartTime = (t) => Math.floor(t / 1000) - new Date(t).getTimezoneOffset() * 60;
+const cssVar = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function chartColors() { return { bg: cssVar("--panel"), text: cssVar("--muted"), line: cssVar("--line"), up: cssVar("--long"), dn: cssVar("--exit"), acc: cssVar("--accent") }; }
+function makeChart() {
+  if (!LWC || CH) return;
+  const c = chartColors();
+  const chart = LWC.createChart($("#chart"), {
+    autoSize: true,
+    layout: { background: { type: "solid", color: c.bg }, textColor: c.text, fontFamily: "Figtree, system-ui, sans-serif", fontSize: 11 },
+    grid: { vertLines: { visible: false }, horzLines: { color: c.line } },
+    rightPriceScale: { borderVisible: false, scaleMargins: { top: 0.12, bottom: 0.08 } },
+    timeScale: { borderVisible: false, timeVisible: chTf !== "1d", secondsVisible: false, rightOffset: 3 },
+    crosshair: { mode: 0 },
+    handleScroll: { vertTouchDrag: false },
+    localization: { locale: "sr-Latn-RS" },
+  });
+  const candles = chart.addSeries(LWC.CandlestickSeries, { upColor: c.up, downColor: c.dn, borderVisible: false, wickUpColor: c.up, wickDownColor: c.dn, priceFormat: { type: "price", precision: 2, minMove: 0.01 } });
+  const sma = chart.addSeries(LWC.LineSeries, { color: c.acc, lineWidth: 2, priceLineVisible: false, lastValueVisible: false, crosshairMarkerVisible: false });
+  CH = { chart, candles, sma, markers: LWC.createSeriesMarkers(candles, []) };
+}
+function themeChart() {
+  if (!CH) return;
+  const c = chartColors();
+  CH.chart.applyOptions({ layout: { background: { type: "solid", color: c.bg }, textColor: c.text }, grid: { horzLines: { color: c.line } } });
+  CH.candles.applyOptions({ upColor: c.up, downColor: c.dn, wickUpColor: c.up, wickDownColor: c.dn });
+  CH.sma.applyOptions({ color: c.acc });
+  drawChart(false);
+}
+function chartButtons() {
+  for (const b of document.querySelectorAll("#cSym button")) b.setAttribute("aria-pressed", String(b.dataset.v === chSym));
+  for (const b of document.querySelectorAll("#cTf button")) b.setAttribute("aria-pressed", String(b.dataset.v === chTf));
+  for (const a of document.querySelectorAll(".coin[data-sym]")) a.classList.toggle("sel", a.dataset.sym === chSym);
+}
+async function loadChart(fit) {
+  makeChart();
+  chartButtons();
+  if (!CH) { $("#cLeg").innerHTML = `<b>—</b><span>Grafikon nije učitan. Osveži aplikaciju.</span>`; return; }
+  const id = ++chReq, sym = KR.find((k) => k[0] === chSym)[1];
+  try {
+    const rows = await getJSON(`/klines?symbol=${sym}&interval=${chTf}&limit=${TFS[chTf].limit}`);
+    if (id !== chReq) return;
+    chData = rows.map((k) => ({ t: k[0], o: +k[1], h: +k[2], l: +k[3], c: +k[4] }));
+    CH.chart.applyOptions({ timeScale: { timeVisible: chTf !== "1d" } });
+    drawChart(fit);
+  } catch (e) {
+    if (id === chReq) $("#cLeg").innerHTML = `<b>${chSym}</b><span>Sveće nisu učitane. Proveri internet.</span>`;
+  }
+}
+/* Poslednja sveća uživo, jednom u minuti */
+async function tickChart() {
+  if (!CH || !chData || !chData.length || VIEW !== "danas" || document.visibilityState !== "visible") return;
+  const id = chReq, sym = KR.find((k) => k[0] === chSym)[1];
+  try {
+    const rows = await getJSON(`/klines?symbol=${sym}&interval=${chTf}&limit=2`);
+    if (id !== chReq) return;
+    for (const k of rows) {
+      const b = { t: k[0], o: +k[1], h: +k[2], l: +k[3], c: +k[4] }, last = chData[chData.length - 1];
+      if (last.t === b.t) chData[chData.length - 1] = b; else if (b.t > last.t) chData.push(b);
+    }
+    drawChart(false);
+  } catch (e) { /* sledeći put */ }
+}
+function drawChart(fit) {
+  if (!CH || !chData || !chData.length) return;
+  const c = chartColors(), daily = chTf === "1d", N = ST ? ST.cfg.N : SET.trendN;
+  const prec = chData[chData.length - 1].c >= 1000 ? 0 : 2;
+  CH.chart.applyOptions({ localization: { locale: "sr-Latn-RS", priceFormatter: (p) => nf(p, prec) } });
+  CH.candles.applyOptions({ priceFormat: { type: "price", precision: prec, minMove: prec ? 0.01 : 1 } });
+  CH.candles.setData(chData.map((b) => ({ time: chartTime(b.t), open: b.o, high: b.h, low: b.l, close: b.c })));
+  const sm = [];
+  if (daily) {
+    let s = 0;
+    for (let i = 0; i < chData.length; i++) { s += chData[i].c; if (i >= N) s -= chData[i - N].c; if (i >= N - 1) sm.push({ time: chartTime(chData[i].t), value: s / N }); }
+  }
+  CH.sma.setData(sm);
+  for (const pl of chLines) CH.candles.removePriceLine(pl);
+  chLines = [];
+  const row = ST ? stateNow().rows.find((r) => r.name === chSym) : null;
+  if (row) {
+    chLines.push(CH.candles.createPriceLine({ price: row.thr, color: c.acc, lineWidth: 1, lineStyle: LWC.LineStyle.Dashed, axisLabelVisible: true, title: "Prag" }));
+    if (row.stop) chLines.push(CH.candles.createPriceLine({ price: row.stop, color: c.dn, lineWidth: 2, lineStyle: LWC.LineStyle.Solid, axisLabelVisible: true, title: "Stop" }));
+  }
+  const mk = [];
+  if (daily && ST) {
+    const { K, W } = ST, m = K.m, a = K.A.findIndex((x) => x.name === chSym), t0 = chData[0].t;
+    for (let i = 1; i < K.n; i++) {
+      if (K.days[i] < t0) continue;
+      const w = W[i * m + a], wp = W[(i - 1) * m + a];
+      if (w > 0 && wp === 0) mk.push({ time: chartTime(K.days[i]), position: "belowBar", shape: "arrowUp", color: c.up, text: "Ulaz" });
+      else if (w === 0 && wp > 0) mk.push({ time: chartTime(K.days[i]), position: "aboveBar", shape: "arrowDown", color: c.dn, text: "Izlaz" });
+    }
+  }
+  // natpis samo na poslednja dva, da se strelice ne preklapaju
+  mk.forEach((x, k) => { if (k < mk.length - 2) x.text = ""; });
+  CH.markers.setMarkers(mk);
+  const last = chData[chData.length - 1], prev = chData.length > 1 ? chData[chData.length - 2] : last, ch = (last.c / prev.c - 1) * 100;
+  $("#cLeg").innerHTML = `<b>${npx(last.c)}</b><span class="${ch >= 0 ? "up" : "down"}">${sgn(ch, 2)}%</span><span>${chSym} · ${TFS[chTf].label} sveće${daily ? ` · prosek ${N} dana` : ""}</span>`;
+  if (fit) { const n = chData.length; CH.chart.timeScale().setVisibleLogicalRange({ from: Math.max(0, n - TFS[chTf].fit), to: n + 2 }); }
+}
+$("#cSym").addEventListener("click", (e) => { const v = e.target.dataset && e.target.dataset.v; if (v && v !== chSym) { chSym = v; store.set("chSym", v); loadChart(true); } });
+$("#cTf").addEventListener("click", (e) => { const v = e.target.dataset && e.target.dataset.v; if (v && v !== chTf && TFS[v]) { chTf = v; store.set("chTf", v); loadChart(true); } });
+$("#coins").addEventListener("click", (e) => {
+  const a = e.target.closest(".coin[data-sym]");
+  if (!a) return;
+  if (a.dataset.sym !== chSym) { chSym = a.dataset.sym; store.set("chSym", chSym); loadChart(true); }
+  $("#chartCard").scrollIntoView({ behavior: "smooth", block: "start" });
+});
+window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => setTimeout(themeChart, 50));
+
+/* ---------- FTMO ---------- */
+function renderFtmo() {
+  $("#feeTxt").textContent = `${nf(SET.fee, 0)} €`;
+  const out = $("#ftOut");
+  if (!ST) { out.innerHTML = `<div class="skel"></div>`; return; }
+  if (!ST.ftmo) { out.innerHTML = `<div class="skel"></div>`; setTimeout(() => { if (ST && !ST.ftmo) { ST.ftmo = krTraders(ST.K, ST.E); renderFtmo(); } }, 30); return; }
+  const R = ST.ftmo, K = ST.K, E = ST.E, n = K.n, fee = SET.fee;
+  if (!R) { out.innerHTML = `<div class="empty"><b>Premalo istorije</b>Evolucija još nema dovoljno završenih izazova.</div>`; return; }
+  const evo = R.strats[0], def = R.strats[1 + EVO_DEF], fixed = R.strats.slice(1);
+  const sh = (x) => (Number.isFinite(x) ? nf(x * 100, 0) + "%" : "—");
+  const md = (m) => (m.med === Infinity ? "> 365" : Number.isFinite(m.med) ? String(m.med) : "—");
+  const card = (st, title, main) => `<div class="card${main ? " main" : ""}"><h3>${title}</h3><div class="big">${sh(st.m.f12)}<small>finansiran nalog za 12 meseci</small></div>`
+    + `<dl><div><dt>Za 6 meseci</dt><dd>${sh(st.m.f6)}</dd></div><div><dt>Medijana</dt><dd>${md(st.m)} dana</dd></div><div><dt>Izazova</dt><dd>${nf(st.m.fees, 1)} · ${nf(st.m.fees * fee, 0)} €</dd></div></dl></div>`;
+  const dF = evo.m.f12 - def.m.f12;
+  let cls = "", vtxt;
+  if (evo.m.f12 < 0.5) { cls = "bad"; vtxt = "Ni evolucija ne prolazi pouzdano na ovim podešavanjima."; }
+  else if (dF >= 0.05) { cls = "good"; vtxt = `Evolucija je bila bolja, birajući samo iz prošlosti${evo.m.fees > def.m.fees + 0.25 ? `, ali uz više plaćenih izazova (${nf(evo.m.fees, 1)} umesto ${nf(def.m.fees, 1)})` : ""}.`; }
+  else if (dF <= -0.05) { cls = "bad"; vtxt = "Evolucija je bila gora od jednostavnog pravila. Bolje je isključiti je."; }
+  else vtxt = "Razlika je mala: evolucija nije jasno bolja od jednostavnog pravila.";
+  const cNow = EVO_CFGS[E.pick[n]], wNow = E.why[n];
+  const whyNow = wNow === 0 ? `najbrži put među onima sa bar ${nf(SET.pMin, 0)}% šanse: ${nf(E.sP[n] * 100, 0)}% prolaza na ${E.sN[n]} prošlih izazova, oko ${nf(E.sET[n], 0)} dana do finansiranog naloga`
+    : wNow === 1 ? `nijedan nema ${nf(SET.pMin, 0)}% šanse, pa uzima najsigurniji (${nf(E.sP[n] * 100, 0)}%)` : "premalo istorije, pa uzima unapred zadato";
+  let changes = 0;
+  for (let d = R.first + 1; d <= n; d++) if (E.pick[d] !== E.pick[d - 1]) changes++;
+  const items = R.chain.slice(-8).reverse().map((it) => {
+    const o = it.o, c = EVO_CFGS[it.c];
+    const res = o.why === "ok" ? ["ok", "Prošao oba koraka"] : o.why === "traje" ? ["run", `U toku, korak ${o.phase}`] : ["bad", `Pao u koraku ${o.phase}: ${o.why === "dnevni" ? "dnevni gubitak" : "ukupni gubitak"}`];
+    return `<li><i class="${res[0]}"></i><div><b>${res[1]}</b><span>${dyFmt.format(K.days[it.s])} · prosek ${c.N}, rizik ${c.vt}%${it.cause ? ` · ${esc(it.cause)}` : ""}</span></div><em>${o.end - it.s + 1} d</em></li>`;
+  }).join("");
+  const rows = fixed.slice().sort((a, b) => b.m.f12 - a.m.f12 || a.m.fees - b.m.fees).map((st) => `<tr class="${st === def ? "hl" : ""}"><td>${st.label.replace("prosek ", "").replace(", rizik ", " · ")}</td><td>${sh(st.m.f6)}</td><td><b class="${st.m.f12 >= 0.7 ? "up" : st.m.f12 < 0.5 ? "down" : ""}">${sh(st.m.f12)}</b></td><td>${md(st.m)}</td><td>${nf(st.m.fees, 1)}</td></tr>`).join("");
+  out.innerHTML = `<div style="display:grid;gap:14px">`
+    + `<div class="cmp">${card(evo, "Evolucija", true)}${card(def, "Prosek 50, rizik 10%", false)}</div>`
+    + `<div class="verdict ${cls}">${vtxt}</div>`
+    + `<div class="panel"><h3>Danas bira: prosek ${cNow.N}, rizik ${cNow.vt}%</h3><p class="muted">${whyNow}. Promenila je izbor ${changes} puta od ${dyFmt.format(K.days[R.first])}</p></div>`
+    + `<div class="panel"><h3>Poslednji izazovi</h3><ul class="tl">${items}</ul><p class="muted" style="font-size:12.5px">Jedan neprekidan put kroz istoriju. Posle svakog ishoda odmah nov izazov, sa parametrima koje evolucija tada izabere.</p></div>`
+    + `<details class="more"><summary>Svi parametri (prosek · rizik)</summary><div class="tscroll"><table class="t"><thead><tr><th>Prosek · rizik</th><th>6 mes.</th><th>12 mes.</th><th>Medijana</th><th>Izazova</th></tr></thead><tbody>${rows}</tbody></table></div><p class="fine">Najbolji red je izabran gledajući unazad, što unapred ne možeš da znaš. Pošteno poređenje je evolucija naspram unapred zadatog pravila (označeno).</p></details>`
+    + `<details class="more"><summary>Pretpostavke</summary><div><ul class="fine-list"><li>Gubitak se meri i tokom dana, preko dnevnog minimuma sve tri kovanice u istom trenutku. Cilj se meri na zatvaranju dana.</li><li>Osigurač: stop na svakoj kovanici, klizanje 0,5%.</li><li>Najmanje 4 dana po koraku; korak 2 počinje dan posle prolaza.</li><li>Kovanice su izabrane znajući da su preživele, a izazovi se preklapaju u vremenu. Budućnost može biti slabija.</li></ul></div></details>`
+    + `</div>`;
+}
+
+/* ---------- dnevnik ---------- */
+function renderDnevnik() {
+  const j = journal().slice().reverse(), closed = j.filter((e) => e.outT);
+  let usd = 0, cnt = 0;
+  for (const e of closed) if (e.qty) { usd += (e.outP - e.inP) * e.qty; cnt++; }
+  $("#jsum").innerHTML = `<div class="fact"><span>Otvoreno</span><b>${j.filter((e) => !e.outT).length}</b><em>&nbsp;</em></div>`
+    + `<div class="fact"><span>Zatvoreno</span><b>${closed.length}</b><em>&nbsp;</em></div>`
+    + `<div class="fact"><span>Ukupno</span><b class="${usd >= 0 ? "up" : "down"}">${cnt ? sgn(usd, 0) + " $" : "—"}</b><em>${cnt ? `${cnt} sa količinom` : "&nbsp;"}</em></div>`;
+  $("#jOut2").hidden = !j.some((e) => !e.outT);
+  if (!j.length) { $("#entries").innerHTML = `<div class="empty"><b>Dnevnik je prazan</b>Kad kupiš na FTMO, dodirni „Upiši ulaz“. Tako Kompas zna šta stvarno imaš i javlja kad treba izaći.</div>`; return; }
+  $("#entries").innerHTML = j.map((e) => {
+    const p = e.outP ? (e.outP / e.inP - 1) * 100 : null, u = e.outP && e.qty ? (e.outP - e.inP) * e.qty : null;
+    const plan = !e.plan ? "" : e.plan.ok && (!e.outT || e.outPlan !== false) ? " · po planu" : " · van plana";
+    return `<div class="entry"><div><div class="s">${esc(e.sym)} <span class="muted" style="font:500 13px var(--f-ui)">${e.qty ? nf(e.qty, KR_DEC[e.sym] || 4) : ""}</span></div><div class="d">${dmFmt.format(e.inT)} ${tFmt.format(e.inT)} · ${npx(e.inP)}${e.outT ? ` → ${npx(e.outP)}` : ""}${plan}</div></div>`
+      + `<div class="r ${p === null ? "muted" : p >= 0 ? "up" : "down"}">${p === null ? "otvoreno" : sgn(p, 1) + "%"}${u !== null ? `<div class="d">${sgn(u, 0)} $</div>` : ""}</div>`
+      + (e.note || e.outNote ? `<div class="n">${esc([e.note, e.outNote].filter(Boolean).join(" / "))}</div>` : "") + `</div>`;
+  }).join("");
+}
+
+let jMode = "in", jSym = "BTC";
+function openSheet(mode) {
+  jMode = mode;
+  const rows = ST ? stateNow().rows : [], openSyms = journal().filter((e) => !e.outT).map((e) => e.sym);
+  if (mode === "in") { const r = rows.find((x) => x.w > 0 && !openSyms.includes(x.name)); jSym = r ? r.name : "BTC"; }
+  else jSym = openSyms[0] || "BTC";
+  $("#jTitle").textContent = mode === "in" ? "Upiši ulaz" : "Upiši izlaz";
+  $("#jSub").textContent = mode === "in" ? "Kupovina sa FTMO naloga, samo long." : "Cena po kojoj si prodao.";
+  $("#jPxLbl").textContent = mode === "in" ? "Cena ulaza" : "Cena izlaza";
+  $("#jQtyF").hidden = mode !== "in";
+  $("#jNote").value = "";
+  fillSheet();
+  $("#jSheet").showModal();
+}
+function fillSheet() {
+  for (const b of document.querySelectorAll("#jSym button")) b.setAttribute("aria-pressed", String(b.dataset.v === jSym));
+  const r = ST ? stateNow().rows.find((x) => x.name === jSym) : null, px = r ? r.px : PRICES[jSym];
+  $("#jPx").value = Number.isFinite(px) ? +px.toPrecision(7) : "";
+  $("#jQty").value = r && r.w > 0 ? +(r.usd / r.px).toFixed(KR_DEC[jSym]) : "";
+}
+$("#jSym").addEventListener("click", (e) => { const v = e.target.dataset && e.target.dataset.v; if (v) { jSym = v; fillSheet(); } });
+$("#jCancel").addEventListener("click", () => $("#jSheet").close());
+$("#jSheet").addEventListener("click", (e) => { if (e.target === $("#jSheet")) $("#jSheet").close(); });
+$("#jForm").addEventListener("submit", (e) => {
+  const px = +$("#jPx").value;
+  if (!(px > 0)) { e.preventDefault(); return; }
+  const j = journal(), r = ST ? stateNow().rows.find((x) => x.name === jSym) : null, note = $("#jNote").value.trim();
+  if (jMode === "in") {
+    j.push({ id: Date.now(), mode: "trend", sym: jSym, dir: 1, inT: Date.now(), inP: px, qty: +$("#jQty").value || null, stop: null,
+             plan: r ? { ok: r.w > 0, w: r.w, N: ST.cfg.N, vt: ST.cfg.vt } : null, note, outT: null, outP: null, outNote: "" });
+    toast(`Upisan ulaz: ${jSym}`);
+  } else {
+    const x = j.find((y) => y.sym === jSym && !y.outT);
+    if (!x) { toast(`Nema otvorenog ulaza za ${jSym}`); return; }
+    x.outT = Date.now(); x.outP = px; x.outNote = note; x.outPlan = r ? r.w === 0 || (r.stop !== null && px <= r.stop * 1.01) : null;
+    toast(`Upisan izlaz: ${jSym}`);
+  }
+  saveJournal(j);
+  renderAll();
+});
+for (const id of ["#bIn", "#jIn2"]) $(id).addEventListener("click", () => openSheet("in"));
+for (const id of ["#bOut", "#jOut2"]) $(id).addEventListener("click", () => openSheet("out"));
+
+/* ---------- podešavanja ---------- */
+const SET_IDS = ["acct", "acctType", "fee", "evo", "pMin", "trendN", "trendVol", "guard", "swap", "cost", "sound", "theme"];
+function fillSettings() {
+  for (const k of SET_IDS) { const el = $("#s-" + k); if (el.type === "checkbox") el.checked = !!SET[k]; else el.value = SET[k]; }
+  $("#r-N").hidden = SET.evo; $("#r-vol").hidden = SET.evo;
+  const np = "Notification" in window ? Notification.permission : "unsupported";
+  $("#notifBtn").hidden = np !== "default";
+  $("#notifState").textContent = np === "granted" ? "Dozvoljeno, dok je Kompas otvoren" : np === "denied" ? "Odbijeno u podešavanjima telefona" : np === "unsupported" ? "Ovaj browser ih ne podržava" : "Dok je Kompas otvoren";
+}
+function applyTheme() { if (SET.theme) document.documentElement.setAttribute("data-theme", SET.theme); else document.documentElement.removeAttribute("data-theme"); setTimeout(themeChart, 30); }
+let setT = null;
+function readSettings() {
+  const num = (k, a, b) => { const v = +$("#s-" + k).value; return Number.isFinite(v) && $("#s-" + k).value !== "" ? Math.max(a, Math.min(b, v)) : SET[k]; };
+  const before = JSON.stringify([SET.acctType, SET.evo, SET.pMin, SET.trendN, SET.trendVol, SET.guard, SET.swap, SET.cost]);
+  SET = Object.assign({}, SET, {
+    acct: num("acct", 100, 1e9), acctType: $("#s-acctType").value === "standard" ? "standard" : "swing", fee: num("fee", 0, 10000),
+    evo: $("#s-evo").checked, pMin: num("pMin", 30, 95), trendN: [20, 50, 100].includes(+$("#s-trendN").value) ? +$("#s-trendN").value : 50,
+    trendVol: num("trendVol", 4, 30), guard: num("guard", 0, 4.5), swap: num("swap", 0, 0.5), cost: num("cost", 0, 1),
+    sound: $("#s-sound").checked, theme: $("#s-theme").value,
+  });
+  store.set("set", SET);
+  applyTheme(); updSndBtn();
+  $("#r-N").hidden = SET.evo; $("#r-vol").hidden = SET.evo;
+  const after = JSON.stringify([SET.acctType, SET.evo, SET.pMin, SET.trendN, SET.trendVol, SET.guard, SET.swap, SET.cost]);
+  if (before !== after && RAW) { compute(); store.set("pick", `${ST.cfg.N}/${ST.cfg.vt}`); }
+  renderAll();
+}
+for (const k of SET_IDS) $("#s-" + k).addEventListener("change", () => { clearTimeout(setT); setT = setTimeout(readSettings, 50); });
+$("#sndTest").addEventListener("click", () => { unlockAudio(); if (!chime("buy")) toast(SET.sound ? "Zvuk nije dostupan u ovom browseru" : "Zvuk je isključen"); });
+$("#notifBtn").addEventListener("click", async () => {
+  try { const p = await Notification.requestPermission(); toast(p === "granted" ? "Obaveštenja su dozvoljena" : "Obaveštenja nisu dozvoljena"); } catch (e) { toast("Ovaj browser ne podržava obaveštenja"); }
+  fillSettings();
+});
+function updSndBtn() { $("#sndBtn").setAttribute("aria-pressed", String(!!SET.sound)); $("#sndOff").hidden = !!SET.sound; }
+$("#sndBtn").addEventListener("click", () => { SET.sound = !SET.sound; store.set("set", SET); updSndBtn(); fillSettings(); if (SET.sound) { unlockAudio(); chime("info"); } toast(SET.sound ? "Zvuk upozorenja je uključen" : "Zvuk upozorenja je isključen"); });
+
+/* ---------- ekrani ---------- */
+let VIEW = "danas";
+function show(v) {
+  VIEW = v;
+  for (const b of document.querySelectorAll(".tabs button")) { if (b.dataset.v === v) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current"); }
+  for (const s of document.querySelectorAll(".view")) s.hidden = s.id !== "v-" + v;
+  if (v === "podesavanja") fillSettings();
+  renderAll();
+  window.scrollTo({ top: 0 });
+}
+document.querySelector(".tabs").addEventListener("click", (e) => { const b = e.target.closest("button[data-v]"); if (b) show(b.dataset.v); });
+function renderAll() {
+  if (VIEW === "danas") renderDanas();
+  else if (VIEW === "ftmo") renderFtmo();
+  else if (VIEW === "dnevnik") renderDnevnik();
+  else renderRing();
+}
+
+/* ---------- pokretanje ---------- */
+applyTheme(); updSndBtn();
+RAW = rawFromCache();
+if (RAW) { try { compute(); } catch (e) { RAW = null; ST = null; } }
+renderAll();
+refresh(true).then(pollPrices);
+loadChart(true);
+setInterval(() => { renderRing(); }, 30000);
+setInterval(() => { pollPrices(); tickChart(); }, MIN);
+setInterval(() => refresh(false), 5 * MIN);
+document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") { refresh(false).then(pollPrices); renderAll(); } });
+if ("serviceWorker" in navigator && window.isSecureContext) navigator.serviceWorker.register("sw.js").catch(() => { /* radi i bez toga */ });
+</script>
+</body>
+</html>
