@@ -1,5 +1,5 @@
-/* Kompas mobil 1.1: aplikacija radi i bez interneta (prikazuje poslednje podatke). Binance ide mimo keša. */
-const V = "kompas-mobil-1.1";
+/* Kompas mobil 1.3: aplikacija radi i bez interneta (prikazuje poslednje podatke). Binance ide mimo keša. */
+const V = "kompas-mobil-1.3";
 const SHELL = ["./", "index.html", "lightweight-charts.js", "manifest.webmanifest","ikone/ikona-192.png", "ikone/ikona-512.png", "ikone/apple-touch-icon.png"];
 self.addEventListener("install", (e) => { e.waitUntil(caches.open(V).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting())); });
 self.addEventListener("activate", (e) => { e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== V).map((k) => caches.delete(k)))).then(() => self.clients.claim())); });

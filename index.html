@@ -95,6 +95,15 @@ main { padding-top: 14px; display: grid; gap: 14px; }
 h2.sec { font: 700 13px/1.2 var(--f-ui); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 6px 2px -4px; }
 .lede { color: var(--muted); margin: 0; font-size: 14px; }
 .fine { color: var(--muted); font-size: 12.5px; margin: 2px 2px 0; }
+.pcrow { display: grid; grid-template-columns: 70px auto minmax(0, 1fr); gap: 10px; align-items: center; font-size: 14px; }
+.pcact { font-weight: 700; font-size: 12px; padding: 3px 8px; border-radius: 8px; background: var(--panel-2); }
+.pcact.buy { background: rgba(31,199,126,.18); color: #1FC77E; } .pcact.sell { background: rgba(242,73,92,.18); color: #F2495C; }
+.pcgrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.pcgrid div { display: grid; gap: 2px; } .pcgrid span { font-size: 12px; color: var(--muted); } .pcgrid b { font-size: 16px; }
+.tabs button { min-width: 0; }
+.tabs-in { grid-template-columns: repeat(6, 1fr) !important; }
+.tabs button { font-size: 10.5px; }
+
 
 /* glavna kartica */
 .hero { border-radius: 22px; padding: 18px; background: var(--panel); border: 1px solid var(--line); box-shadow: var(--shadow); display: grid; gap: 14px; position: relative; overflow: hidden; }
@@ -239,7 +248,7 @@ ul.fine-list { margin: 0; padding-left: 18px; color: var(--muted); font-size: 13
   padding: 6px max(8px, env(safe-area-inset-left, 0px)) calc(6px + env(safe-area-inset-bottom, 0px));
   background: var(--bar-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-top: 1px solid var(--line);
 }
-.tabs-in { max-width: 560px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); }
+.tabs-in { max-width: 560px; margin: 0 auto; display: grid; grid-template-columns: repeat(5, 1fr); }
 .tabs button { background: none; border: 0; padding: 6px 2px 4px; display: grid; justify-items: center; gap: 3px; color: var(--muted); font-size: 11.5px; font-weight: 600; cursor: pointer; border-radius: 12px; }
 .tabs button svg { width: 23px; height: 23px; }
 .tabs button[aria-current="page"] { color: var(--accent); }
@@ -262,6 +271,31 @@ dialog.sheet::backdrop { background: rgba(4, 9, 18, .55); }
 .toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(86px + env(safe-area-inset-bottom, 0px)); z-index: 30; max-width: min(520px, calc(100% - 32px)); background: var(--text); color: var(--ink); padding: 11px 16px; border-radius: 14px; font-weight: 600; font-size: 14px; box-shadow: var(--shadow); }
 .alert { border-radius: 16px; padding: 12px 14px; background: var(--warn-tint); border: 1px solid color-mix(in srgb, var(--warn) 40%, var(--line)); font-size: 14px; display: grid; gap: 8px; }
 .alert b { color: var(--warn); }
+
+/* vesti */
+.fng { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); padding: 14px; display: grid; gap: 10px; }
+.fng-top { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; }
+.fng-top .lbl { display: block; font-size: 12px; color: var(--muted); font-weight: 600; margin-bottom: 4px; }
+.fng-top b { font: 800 36px/1 var(--f-display); letter-spacing: -0.03em; margin-right: 8px; }
+.fng-top em { font-style: normal; font-weight: 700; font-size: 15px; }
+.fng-hist { text-align: right; font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+.fng-top .fng-hist b { color: var(--text); font: 700 15px/1.4 var(--f-ui); letter-spacing: 0; margin: 0 0 0 4px; }
+.fng-bar { position: relative; height: 8px; border-radius: 4px; background: linear-gradient(90deg, var(--exit), var(--warn) 50%, var(--long)); margin-inline: 8px; }
+.fng-bar i { position: absolute; top: -4px; width: 16px; height: 16px; border-radius: 50%; background: var(--text); border: 3px solid var(--panel); transform: translateX(-8px); box-shadow: 0 0 0 1px var(--line); }
+.fng-scale { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--muted); }
+.fng p { margin: 0; font-size: 12.5px; color: var(--muted); }
+.news-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.newslist { display: grid; gap: 10px; }
+.news { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 12px 14px; display: grid; gap: 8px; min-width: 0; }
+.news a.nl { color: inherit; text-decoration: none; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: start; }
+.news .nmeta { font-size: 12px; color: var(--muted); display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.news .src { font-weight: 700; color: var(--accent); }
+.news h3 { margin: 4px 0 0; font: 700 15.5px/1.32 var(--f-ui); text-wrap: pretty; }
+.news p { margin: 5px 0 0; font-size: 13px; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.news img { width: 72px; height: 72px; border-radius: 12px; object-fit: cover; background: var(--panel-2); display: block; }
+.news .nfoot { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; min-height: 22px; }
+.news .nfoot a { margin-left: auto; font-size: 12.5px; color: var(--accent); text-decoration: none; font-weight: 600; padding: 4px 0; }
+.news.new { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
 
 /* grafikon */
 .chart-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); padding: 12px 12px 10px; display: grid; gap: 10px; min-width: 0; }
@@ -334,6 +368,17 @@ dialog.sheet::backdrop { background: rgba(4, 9, 18, .55); }
       <p class="fine">Odluka je jednom dnevno, posle zatvaranja dnevne sveće. Stop važi do sledećeg zatvaranja. Ovo su rezultati pravila, ne finansijski savet: odluka o novcu je tvoja.</p>
     </section>
 
+    <!-- ============ VESTI ============ -->
+    <section class="view" id="v-vesti" aria-label="Vesti" hidden>
+      <div id="fngBox"><div class="skel" style="height:118px"></div></div>
+      <div class="news-head">
+        <div class="seg mini" id="nf" role="group" aria-label="Filter vesti"><button type="button" data-v="Sve">Sve</button><button type="button" data-v="BTC">BTC</button><button type="button" data-v="ETH">ETH</button><button type="button" data-v="SOL">SOL</button></div>
+        <button class="btn small" id="nRefresh" type="button">Osveži</button>
+      </div>
+      <div class="newslist" id="newsList"><div class="skel"></div><div class="skel"></div></div>
+      <p class="fine">Vesti: CoinDesk, Cointelegraph, Decrypt, The Block, Bitcoin Magazine i CryptoSlate. Raspoloženje: alternative.me. Vesti su samo za informaciju. Pravilo korpe ih ne koristi, pa ni ti ne menjaj odluku zbog vesti.</p>
+    </section>
+
     <!-- ============ FTMO ============ -->
     <section class="view" id="v-ftmo" aria-label="FTMO test" hidden>
       <p class="lede">Izazov od <b id="feeTxt">89 €</b>: korak 1 +10%, korak 2 +5%, bez pada od 5% u danu i 10% ukupno. Kad padne, kupuje se nov. Svakih 30 dana od 2018. kreće po jedan trejder.</p>
@@ -341,6 +386,18 @@ dialog.sheet::backdrop { background: rgba(4, 9, 18, .55); }
     </section>
 
     <!-- ============ DNEVNIK ============ -->
+    <!-- ============ RAČUNAR ============ -->
+    <section class="view" id="v-racunar" aria-label="Sa računara" hidden>
+      <p class="lede">Stanje sa <b>Kompas Terminala</b> na računaru: korpe akcija i forexa, FTMO nalog, bot, kalendar i važne vesti. Računar ga šalje na 30 minuta preko ntfy.</p>
+      <div id="pcBody"><div class="skel" style="height:120px"></div></div>
+      <div class="panel">
+        <h3>Veza sa računarom</h3>
+        <label class="field"><span>ntfy tema (ista kao u Podešavanjima Kompas Terminala)</span><input id="pcTopic" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="npr. kompas-3f9a1c2b7d4e"></label>
+        <div style="display:flex;gap:8px"><button class="btn" id="pcSave" type="button">Sačuvaj</button><button class="btn" id="pcRefresh" type="button">Osveži</button></div>
+        <p class="fine">Računar mora da radi (Kompas Terminal pored sata). Stanje se čita sa teme „tema-stanje“; na nju ne treba da se pretplatiš u ntfy, da ti ne stižu poruke.</p>
+      </div>
+    </section>
+
     <section class="view" id="v-dnevnik" aria-label="Dnevnik" hidden>
       <div class="jsum" id="jsum"></div>
       <div class="btns"><button class="btn primary" id="jIn2">Upiši ulaz</button><button class="btn" id="jOut2">Upiši izlaz</button></div>
@@ -385,7 +442,9 @@ dialog.sheet::backdrop { background: rgba(4, 9, 18, .55); }
 <nav class="tabs" aria-label="Ekrani">
   <div class="tabs-in">
     <button data-v="danas" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2.2 4.8-4.8 2.2 2.2-4.8z"/></svg>Danas</button>
+    <button data-v="vesti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h12v14a2 2 0 0 0 2 2H6a2 2 0 0 1-2-2z"/><path d="M16 9h4v10a2 2 0 0 1-2 2"/><path d="M7.5 9h5M7.5 13h5M7.5 17h3"/></svg>Vesti</button>
     <button data-v="ftmo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>FTMO</button>
+    <button data-v="racunar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Računar</button>
     <button data-v="dnevnik"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h11a2 2 0 0 1 2 2v16l-3.5-2-3.5 2-3.5-2L5 21V4a1 1 0 0 1 1-1z"/><path d="M9 8h6M9 12h6"/></svg>Dnevnik</button>
     <button data-v="podesavanja"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg>Podešavanja</button>
   </div>
@@ -1046,6 +1105,88 @@ $("#coins").addEventListener("click", (e) => {
 });
 window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => setTimeout(themeChart, 50));
 
+/* =====================================================================
+   VESTI: kripto vesti sa 6 sajtova (RSS preko rss2json.com, bez ključa) i indeks straha i pohlepe (alternative.me)
+   ===================================================================== */
+const FEEDS = [
+  ["CoinDesk", "https://www.coindesk.com/arc/outboundfeeds/rss/"],
+  ["Cointelegraph", "https://cointelegraph.com/rss"],
+  ["Decrypt", "https://decrypt.co/feed"],
+  ["The Block", "https://www.theblock.co/rss.xml"],
+  ["Bitcoin Magazine", "https://bitcoinmagazine.com/.rss/full/"],
+  ["CryptoSlate", "https://cryptoslate.com/feed/"],
+];
+const COIN_RX = { BTC: /\b(bitcoin|btc)\b/i, ETH: /\b(ether|ethereum|eth)\b/i, SOL: /\b(solana|sol)\b/i };
+const FNG_SR = { "Extreme Fear": "Ekstremni strah", "Fear": "Strah", "Neutral": "Neutralno", "Greed": "Pohlepa", "Extreme Greed": "Ekstremna pohlepa" };
+let NEWS = store.get("news", null), FNG = store.get("fng", null), newsLoading = false, newsErr = false;
+let newsF = ["Sve", "BTC", "ETH", "SOL"].includes(store.get("newsF", "Sve")) ? store.get("newsF", "Sve") : "Sve";
+const decodeHtml = (x) => { const t = document.createElement("textarea"); t.innerHTML = x; return t.value; };
+const stripHtml = (x) => decodeHtml(String(x || "").replace(/<[^>]+>/g, " ")).replace(/\s+/g, " ").trim();
+const httpUrl = (u) => (/^https?:\/\//i.test(String(u || "")) ? String(u) : "");
+function ago(t) { const m = Math.max(0, Math.round((Date.now() - t) / MIN)); return m < 60 ? `pre ${m} min` : m < 1440 ? `pre ${Math.round(m / 60)} h` : `pre ${Math.round(m / 1440)} d`; }
+async function getAny(url) { const r = await fetch(url, { cache: "no-store" }); if (!r.ok) throw new Error(String(r.status)); return r.json(); }
+async function loadNews(force) {
+  if (newsLoading) return;
+  if (!force && NEWS && Date.now() - NEWS.t < 10 * MIN) return;
+  newsLoading = true;
+  if (VIEW === "vesti") renderVesti();
+  try {
+    const res = await Promise.allSettled(FEEDS.map(([name, url]) => getAny("https://api.rss2json.com/v1/api.json?rss_url=" + encodeURIComponent(url)).then((j) => ({ name, j }))));
+    const items = [], seen = new Set();
+    for (const r of res) {
+      if (r.status !== "fulfilled" || !r.value.j || r.value.j.status !== "ok") continue;
+      for (const it of r.value.j.items || []) {
+        const title = stripHtml(it.title), link = httpUrl(it.link), key = title.toLowerCase();
+        if (!title || !link || seen.has(key)) continue;
+        seen.add(key);
+        const t = Date.parse(String(it.pubDate || "").replace(" ", "T") + "Z"), desc = stripHtml(it.description).slice(0, 240);
+        const enc = it.enclosure && /image/.test(it.enclosure.type || "") ? it.enclosure.link : "";
+        const text = `${title} ${desc} ${(it.categories || []).join(" ")}`;
+        items.push({ src: r.value.name, title, desc, link, t: Number.isFinite(t) ? t : Date.now(), img: /^https:\/\//.test(it.thumbnail || "") ? it.thumbnail : /^https:\/\//.test(enc || "") ? enc : "",
+                     coins: Object.keys(COIN_RX).filter((k) => COIN_RX[k].test(text)) });
+      }
+    }
+    newsErr = !items.length;
+    if (items.length) {
+      items.sort((a, b) => b.t - a.t);
+      NEWS = { t: Date.now(), prevT: NEWS ? NEWS.t : 0, items: items.slice(0, 60) };
+      store.set("news", NEWS);
+    }
+    try { const f = await getAny("https://api.alternative.me/fng/?limit=8"); if (f && Array.isArray(f.data) && f.data.length) { FNG = { t: Date.now(), d: f.data }; store.set("fng", FNG); } } catch (e) { /* bez indeksa */ }
+  } finally {
+    newsLoading = false;
+    if (VIEW === "vesti") renderVesti();
+  }
+}
+function renderVesti() {
+  for (const b of document.querySelectorAll("#nf button")) b.setAttribute("aria-pressed", String(b.dataset.v === newsF));
+  $("#nRefresh").disabled = newsLoading;
+  $("#nRefresh").textContent = newsLoading ? "Osvežavam…" : "Osveži";
+  if (FNG && FNG.d && FNG.d.length) {
+    const v = +FNG.d[0].value, y = FNG.d[1] ? +FNG.d[1].value : null, w = FNG.d[7] ? +FNG.d[7].value : null;
+    const col = v < 25 ? "var(--exit)" : v < 45 ? "var(--warn)" : v <= 55 ? "var(--text)" : "var(--long)";
+    $("#fngBox").innerHTML = `<div class="fng"><div class="fng-top"><div><span class="lbl">Raspoloženje tržišta danas</span><b style="color:${col}">${v}</b><em style="color:${col}">${esc(FNG_SR[FNG.d[0].value_classification] || FNG.d[0].value_classification)}</em></div>`
+      + `<div class="fng-hist">${y !== null ? `Juče <b>${y}</b><br>` : ""}${w !== null ? `Pre 7 dana <b>${w}</b>` : ""}</div></div>`
+      + `<div class="fng-bar" aria-hidden="true"><i style="left:${Math.max(0, Math.min(100, v))}%"></i></div><div class="fng-scale"><span>0 · strah</span><span>50</span><span>pohlepa · 100</span></div>`
+      + `<p>${v >= 75 ? "Velika pohlepa: tada je FOMO najjači. Drži se pravila." : v <= 25 ? "Veliki strah: tada je najteže držati poziciju. Drži se pravila." : "Indeks straha i pohlepe, 0–100, osvežava se jednom dnevno."}</p></div>`;
+  } else if (!newsLoading) $("#fngBox").innerHTML = "";
+  const list = $("#newsList");
+  if (!NEWS || !NEWS.items.length) {
+    list.innerHTML = newsLoading ? `<div class="skel"></div><div class="skel"></div>` : `<div class="empty"><b>Vesti nisu učitane</b>Proveri internet pa dodirni „Osveži“.</div>`;
+    return;
+  }
+  const items = NEWS.items.filter((x) => newsF === "Sve" || x.coins.includes(newsF));
+  if (!items.length) { list.innerHTML = `<div class="empty"><b>Nema vesti za ${newsF}</b>U poslednjim vestima ${newsF} se ne pominje.</div>`; return; }
+  list.innerHTML = items.map((x) => {
+    const tr = "https://translate.google.com/translate?sl=auto&tl=sr&u=" + encodeURIComponent(x.link);
+    return `<article class="news${NEWS.prevT && x.t > NEWS.prevT ? " new" : ""}"><a class="nl" href="${esc(x.link)}" target="_blank" rel="noopener noreferrer"><div><div class="nmeta"><span class="src">${esc(x.src)}</span><span>· ${ago(x.t)}</span></div><h3>${esc(x.title)}</h3>${x.desc ? `<p>${esc(x.desc)}</p>` : ""}</div>`
+      + `${x.img ? `<img src="${esc(x.img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : ""}</a>`
+      + `<div class="nfoot">${x.coins.map((c) => `<span class="pill">${c}</span>`).join("")}<a href="${esc(tr)}" target="_blank" rel="noopener noreferrer">Prevedi na srpski</a></div></article>`;
+  }).join("") + (newsErr ? `<p class="fine">Osvežavanje nije uspelo, ovo su vesti od ${tFmt.format(NEWS.t)}.</p>` : "");
+}
+$("#nf").addEventListener("click", (e) => { const v = e.target.dataset && e.target.dataset.v; if (v && v !== newsF) { newsF = v; store.set("newsF", v); renderVesti(); } });
+$("#nRefresh").addEventListener("click", () => loadNews(true));
+
 /* ---------- FTMO ---------- */
 function renderFtmo() {
   $("#feeTxt").textContent = `${nf(SET.fee, 0)} €`;
@@ -1184,6 +1325,51 @@ $("#notifBtn").addEventListener("click", async () => {
 function updSndBtn() { $("#sndBtn").setAttribute("aria-pressed", String(!!SET.sound)); $("#sndOff").hidden = !!SET.sound; }
 $("#sndBtn").addEventListener("click", () => { SET.sound = !SET.sound; store.set("set", SET); updSndBtn(); fillSettings(); if (SET.sound) { unlockAudio(); chime("info"); } toast(SET.sound ? "Zvuk upozorenja je uključen" : "Zvuk upozorenja je isključen"); });
 
+
+/* ---------- sa računara: stanje Kompas Terminala preko ntfy (tema „…-stanje“) ---------- */
+const PC = { d: null, t: 0, err: null };
+const PC_ACT = { kupi: "KUPI", short: "PRODAJ", izadji: "IZAĐI", okreni_long: "OKRENI long", okreni_short: "OKRENI short", drzi: "drži", van: "van" };
+async function loadPc() {
+  const topic = (store.get("ntfy", "") || "").trim();
+  if (!topic) { PC.err = "Upiši ntfy temu ispod."; renderPc(); return; }
+  try {
+    const r = await fetch(`https://ntfy.sh/${encodeURIComponent(topic)}-stanje/json?poll=1&since=24h`, { cache: "no-store" });
+    const lines = (await r.text()).trim().split("\n").filter(Boolean).map((l) => { try { return JSON.parse(l); } catch (e) { return null; } }).filter((x) => x && x.event === "message" && x.message);
+    if (!lines.length) { PC.err = "Još nema stanja sa računara. Proveri da je Kompas Terminal upaljen i da je u njemu ista tema."; renderPc(); return; }
+    PC.d = JSON.parse(lines[lines.length - 1].message); PC.t = PC.d.t || lines[lines.length - 1].time * 1000; PC.err = null;
+    store.set("pcLast", PC.d);
+  } catch (e) { PC.err = "Nema veze sa ntfy (" + e.message + "). Prikazujem poslednje sačuvano."; PC.d = PC.d || store.get("pcLast", null); }
+  renderPc();
+}
+function renderPc() {
+  const el = $("#pcBody");
+  if (!el) return;
+  $("#pcTopic").value = store.get("ntfy", "");
+  const d = PC.d;
+  if (!d) { el.innerHTML = `<div class="panel"><p class="fine">${esc(PC.err || "Učitavam…")}</p></div>`; return; }
+  const ago = Math.round((Date.now() - (d.t || 0)) / 60000);
+  let h = `<p class="fine">Stanje od ${new Date(d.t).toLocaleTimeString("sr-Latn-RS", { hour: "2-digit", minute: "2-digit" })} (pre ${ago} min).${PC.err ? " " + esc(PC.err) : ""}</p>`;
+  const names = { kripto: "Kripto korpa", akcije: "Korpa akcija", forex: "Forex korpa" };
+  for (const b of ["kripto", "akcije", "forex"]) {
+    const k = (d.korpe || {})[b];
+    if (!k) continue;
+    let acts, hold, extra = "";
+    if (b === "kripto") { acts = k.rows.filter((r) => !["drzi", "van"].includes(r[1])); hold = k.rows.filter((r) => r[1] === "drzi" || r[1] === "kupi").map((r) => r[0]); }
+    else { acts = k.acts || []; hold = k.hold || []; if (k.reg) extra = `S&P 500 ${k.reg[1] >= 0 ? "+" : ""}${nf(k.reg[1], 1)}% od proseka: ${k.reg[0] ? "u tržištu" : "van tržišta"}`; }
+    h += `<div class="panel"><h3>${names[b]} <span class="fine">· sveća ${esc(k.asof || "")}</span></h3>`
+      + (acts.length ? acts.map((r) => `<div class="pcrow"><b>${esc(r[0])}</b><span class="pcact ${/KUPI|long/.test(PC_ACT[r[1]] || "") ? "buy" : "sell"}">${esc(PC_ACT[r[1]] || r[1])}</span><span>${r[2] ? nf(r[2], r[2] < 10 ? 4 : 2) : ""}</span></div>`).join("") : `<p class="fine" style="margin:0">Bez promena danas.</p>`)
+      + `<p class="fine" style="margin:0">${hold.length ? "U poziciji: " + hold.map(esc).join(", ") : "Nema pozicija"}${extra ? " · " + esc(extra) : ""}</p></div>`;
+  }
+  if (d.ftmo) h += `<div class="panel"><h3>FTMO nalog danas</h3><div class="pcgrid"><div><span>Ne ispod</span><b>${nf(d.ftmo.floor, 0)} $</b></div><div><span>Iskorišćeno</span><b>${nf((d.ftmo.used || 0) * 100, 0)}%</b></div><div><span>Ukupno ne ispod</span><b>${nf(d.ftmo.max, 0)} $</b></div></div></div>`;
+  if (d.bot) { const b = d.bot; h += `<div class="panel"><h3>Bot (demo) · izazov #${b.n}, korak ${b.phase}</h3><div class="pcgrid"><div><span>Kapital</span><b>${nf(b.eq, 0)} $</b></div><div><span>Danas</span><b>${sgn(b.today, 0)} $</b></div><div><span>Realizovano</span><b>${sgn(b.real, 0)} $</b></div><div><span>Otvoreno</span><b>${sgn(b.unr, 0)} $</b></div><div><span>Cilj</span><b>${nf(b.target, 0)} $</b></div><div><span>Prošao / pao</span><b>${b.pass} / ${b.fail}</b></div></div></div>`; }
+  h += `<div class="panel"><h3>Danas u kalendaru</h3>${(d.cal || []).length ? d.cal.map((c) => `<div class="pcrow"><b>${esc(c[0])}</b><span>${esc(c[1])}</span><span>${esc(c[2])}</span></div>`).join("") : `<p class="fine" style="margin:0">Nema vesti visokog uticaja.</p>`}</div>`;
+  if ((d.news || []).length) h += `<div class="panel"><h3>Važne vesti</h3>${d.news.map((n) => `<p style="margin:0"><b>${esc(n[1])}</b><br><span class="fine">${esc(n[0])}</span></p>`).join("")}</div>`;
+  h += `<p class="fine">Signali su pravila koja su prošla test na istoriji. Nije finansijski savet.</p>`;
+  el.innerHTML = h;
+}
+$("#pcSave").addEventListener("click", () => { store.set("ntfy", $("#pcTopic").value.trim()); toast("Tema je sačuvana"); loadPc(); });
+$("#pcRefresh").addEventListener("click", () => loadPc());
+
 /* ---------- ekrani ---------- */
 let VIEW = "danas";
 function show(v) {
@@ -1191,6 +1377,8 @@ function show(v) {
   for (const b of document.querySelectorAll(".tabs button")) { if (b.dataset.v === v) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current"); }
   for (const s of document.querySelectorAll(".view")) s.hidden = s.id !== "v-" + v;
   if (v === "podesavanja") fillSettings();
+  if (v === "vesti") loadNews(false);
+  if (v === "racunar") loadPc();
   renderAll();
   window.scrollTo({ top: 0 });
 }
@@ -1199,6 +1387,8 @@ function renderAll() {
   if (VIEW === "danas") renderDanas();
   else if (VIEW === "ftmo") renderFtmo();
   else if (VIEW === "dnevnik") renderDnevnik();
+  else if (VIEW === "vesti") renderVesti();
+  else if (VIEW === "racunar") renderPc();
   else renderRing();
 }
 
@@ -1212,6 +1402,8 @@ loadChart(true);
 setInterval(() => { renderRing(); }, 30000);
 setInterval(() => { pollPrices(); tickChart(); }, MIN);
 setInterval(() => refresh(false), 5 * MIN);
+setInterval(() => { if (VIEW === "vesti" && document.visibilityState === "visible") loadNews(false); }, MIN);
+setInterval(() => { if (VIEW === "racunar" && document.visibilityState === "visible") loadPc(); }, 5 * MIN);
 document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") { refresh(false).then(pollPrices); renderAll(); } });
 if ("serviceWorker" in navigator && window.isSecureContext) navigator.serviceWorker.register("sw.js").catch(() => { /* radi i bez toga */ });
 </script>
